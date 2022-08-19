@@ -1,0 +1,101 @@
+sidebar {
+    width: 210px;
+    -moz-transition: width 0.5s ease-out;
+    -o-transition: width 0.5s ease-out;
+    -webkit-transition: width 0.5s ease-out;
+    transition: width 0.5s ease-out;
+    display: inline-block;
+    z-index: 0;
+}
+
+
+.nav-sidebar {
+    background: none;
+    margin-top: 5px;
+}
+
+.sidebar {
+    ul li a span
+
+{
+    &.fa
+
+{
+    font-size: 20px;
+}
+
+}
+}
+
+
+.menuText {
+    left: 50px;
+    opacity: 1;
+    -moz-transition: opacity 0.6s 0.2s ease-out;
+    -o-transition: opacity 0.6s 0.2s ease-out;
+    -webkit-transition: opacity 0.6s 0.2s ease-out;
+    transition: opacity 0.6s 0.2s ease-out;
+    position: absolute;
+}
+
+.collapseToggle {
+    padding-left: 4px;
+    display: block;
+    cursor: pointer;
+    padding-right: 5px;
+    //So it's easier to click
+}
+
+#toggleIcon {
+    -moz-transition: transform 0.4s ease-out;
+    -o-transition: transform 0.4s ease-out;
+    -webkit-transition: transform 0.4s ease-out;
+    transition: transform 0.4s ease-out;
+}
+
+.rotate {
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+    -moz-transition: transform 0.4s ease-out;
+    -o-transition: transform 0.4s ease-out;
+    -webkit-transition: transform 0.4s ease-out;
+    transition: transform 0.4s ease-out;
+}
+
+.sidebar--Collapse {
+    width: 55px;
+    -moz-transition: width 0.6s ease-out;
+    -o-transition: width 0.6s ease-out;
+    -webkit-transition: width 0.6s ease-out;
+    transition: width 0.6s ease-out;
+    .menuText
+
+{
+    opacity: 0;
+    -moz-transition: opacity 0.3s ease-out;
+    -o-transition: opacity 0.3s ease-out;
+    -webkit-transition: opacity 0.3s ease-out;
+    transition: opacity 0.3s ease-out;
+    position: absolute;
+}
+
+}
+
+.main {
+    margin-left: 200px;
+    -moz-transition: margin-left 0.55s ease-out;
+    -o-transition: margin-left 0.55s ease-out;
+    -webkit-transition: margin-left 0.55s ease-out;
+    transition: margin-left 0.55s ease-out;
+}
+
+.main--slide {
+    -moz-transition: margin-left 0.6s ease-out;
+    -o-transition: margin-left 0.6s ease-out;
+    -webkit-transition: margin-left 0.6s ease-out;
+    transition: margin-left 0.6s ease-out;
+    margin-left: 45px;
+}

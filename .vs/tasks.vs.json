@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-_layouts",
+      "appliesTo": "public/template/scss/vertical-layout-light/_layouts.scss",
+      "type": "launch"
+    }
+  ]
+}

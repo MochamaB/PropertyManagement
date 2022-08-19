@@ -1,0 +1,380 @@
+
+
+
+
+.profile-button {
+    background: rgb(99, 39, 120);
+    box-shadow: none;
+    border: none
+}
+
+.profile-button:hover {
+    background: #682773
+}
+
+.profile-button:focus {
+    background: #682773;
+    box-shadow: none
+}
+
+.profile-button:active {
+    background: #682773;
+    box-shadow: none
+}
+
+.back:hover {
+    color: #682773;
+    cursor: pointer
+}
+
+.labels {
+    font-size: 13px;
+    
+}
+
+.add-experience:hover {
+    background: #BA68C8;
+    color: #fff;
+    cursor: pointer;
+    border: solid 1px #BA68C8
+}
+.profile-labels {
+    font-size: 16px;
+    font-weight:700;
+}
+
+/*     Breadcrumbs*/
+
+
+.breadcrumb > li + li:before {
+    content: "" !important
+}
+
+.breadcrumb {
+    padding: 4px;
+    font-size: 14px;
+    color: #aaa !important;
+    letter-spacing: 1px;
+    border-radius: 5px !important
+}
+
+.first ol {
+    border-top-right-radius: 200px !important;
+    border-bottom-right-radius: 200px !important
+}
+
+.first-1 {
+    background-color: white !important
+}
+
+
+
+    a:focus,
+    a:active {
+        outline: none !important;
+        box-shadow: none !important
+    }
+
+img {
+    vertical-align: bottom;
+    opacity: 0.5
+}
+
+.first span {
+    color: black
+}
+
+.first a:hover {
+    color: black !important
+}
+
+.active-1 span:hover {
+    color: black !important
+}
+
+.active-1 {
+    font-size: 13px !important;
+    color:aqua;
+    padding-bottom: 4px !important;
+    padding-top: 4px !important;
+    padding-right: 10px !important;
+    padding-left: 5px !important;
+    border-radius: 200px !important;
+    background-color: white;
+}
+
+@media (max-width: 767px) {
+    .breadcrumb {
+        font-size: 10px
+    }
+
+    .breadcrumb-item + .breadcrumb-item {
+        padding-left: 0
+    }
+
+    img {
+        width: 11px;
+        height: 11px;
+        vertical-align: middle
+    }
+
+    .active-1 {
+        font-size: 10px !important;
+        padding-right: 8px !important;
+        padding-left: 8px !important;
+        background-color: rgb(51, 0, 80) !important;
+        width: 100% !important
+    }
+
+    .breadcrumb {
+        letter-spacing: 1px !important
+    }
+
+        .breadcrumb > * div {
+            max-width: 60px
+        }
+}
+/* Tables*/
+.tableheading{
+    background-color:white;
+}
+
+/* Cards*/
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid #e3e3e3;
+    border-radius: 0px;
+}
+
+/* Buttons*/
+.home-tab .btn, .home-tab .ajax-upload-dragdrop .ajax-file-upload, .ajax-upload-dragdrop .home-tab .ajax-file-upload, .home-tab .swal2-modal .swal2-buttonswrapper .swal2-styled, .swal2-modal .swal2-buttonswrapper .home-tab .swal2-styled {
+    padding: 8px 15px;
+    border: 1px solid #CADDFF;
+    box-sizing: border-box;
+    border-radius: 6px;
+    color: white;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 12px;
+    margin-bottom: 12px;
+    margin-right: 12px;
+    align-items: center;
+}
+
+/*     Invoice       */
+#invoice {
+    padding: 30px;
+}
+
+.invoice {
+    position: relative;
+    background-color: #FFF;
+    min-height: 680px;
+    padding: 15px
+}
+
+    .invoice header {
+        padding: 10px 0;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #3989c6
+    }
+
+    .invoice .company-details {
+        text-align: right
+    }
+
+        .invoice .company-details .name {
+            margin-top: 0;
+            margin-bottom: 0
+        }
+
+    .invoice .contacts {
+        margin-bottom: 20px
+    }
+
+    .invoice .invoice-to {
+        text-align: left
+    }
+
+        .invoice .invoice-to .to {
+            margin-top: 0;
+            margin-bottom: 0
+        }
+
+    .invoice .invoice-details {
+        text-align: right
+    }
+
+        .invoice .invoice-details .invoice-id {
+            margin-top: 0;
+            color: #3989c6
+        }
+
+    .invoice main {
+        padding-bottom: 50px
+    }
+
+        .invoice main .thanks {
+            margin-top: -100px;
+            font-size: 2em;
+            margin-bottom: 50px
+        }
+
+        .invoice main .notices {
+            padding-left: 6px;
+            border-left: 6px solid #3989c6
+        }
+
+            .invoice main .notices .notice {
+                font-size: 1.2em
+            }
+
+    .invoice table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin-bottom: 20px
+    }
+
+        .invoice table td, .invoice table th {
+            padding: 15px;
+            background: #eee;
+            border-bottom: 1px solid #fff
+        }
+
+        .invoice table th {
+            white-space: nowrap;
+            font-weight: 400;
+            font-size: 16px
+        }
+
+        .invoice table td h3 {
+            margin: 0;
+            font-weight: 400;
+            color: #3989c6;
+            font-size: 1.2em
+        }
+
+        .invoice table .qty, .invoice table .total, .invoice table .unit {
+            text-align: right;
+            font-size: 1.2em
+        }
+
+        .invoice table .no {
+            color: #fff;
+            font-size: 1.6em;
+            background: #3989c6
+        }
+
+        .invoice table .unit {
+            background: #ddd
+        }
+
+        .invoice table .total {
+            background: #3989c6;
+            color: #fff
+        }
+
+        .invoice table tbody tr:last-child td {
+            border: none
+        }
+
+        .invoice table tfoot td {
+            background: 0 0;
+            border-bottom: none;
+            white-space: nowrap;
+            text-align: right;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border-top: 1px solid #aaa
+        }
+
+        .invoice table tfoot tr:first-child td {
+            border-top: none
+        }
+
+        .invoice table tfoot tr:last-child td {
+            color: #3989c6;
+            font-size: 1.4em;
+            border-top: 1px solid #3989c6
+        }
+
+        .invoice table tfoot tr td:first-child {
+            border: none
+        }
+
+    .invoice footer {
+        width: 100%;
+        text-align: center;
+        color: #777;
+        border-top: 1px solid #aaa;
+        padding: 8px 0
+    }
+
+@media print {
+    .invoice {
+        font-size: 11px !important;
+        overflow: hidden !important
+    }
+
+        .invoice footer {
+            position: absolute;
+            bottom: 10px;
+            page-break-after: always
+        }
+
+        .invoice > div:last-child {
+            page-break-before: always
+        }
+}
+/*  badges*/
+.badge-opacity-warning {
+    background: #F95F53;
+    color: white;
+}
+
+#blink_me {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+.formcontrol2 {
+    padding: .4375rem .75rem;
+    border: 1px solid #dee2e6;
+    font-weight: 400;
+    font-size: 14px;
+    border-radius: 4px;
+    height: 2rem;
+    color:#777;
+    padding-right:120px;
+    width: 100%;
+    
+    
+    }
+
+textarea.form-control, textarea.asColorPicker-input, .select2-container--default textarea.select2-selection--single, .select2-container--default .select2-selection--single textarea.select2-search__field, textarea.typeahead,
+textarea.tt-query,
+textarea.tt-hint {
+    min-height: 4rem;
+}
+
+div.nodata{
+    
+    background-color:indianred;
+}
+
+#welcomemessage{
+    border-left:45px solid green;
+    border-radius: 0.0rem;
+    
+}
