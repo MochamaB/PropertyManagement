@@ -15,10 +15,11 @@ class CreatePaymenttypesTable extends Migration
     {
         Schema::create('paymenttypes', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedBigInteger('paymentname');
-            $table->unsignedBigInteger('accountnumber');
+            $table->string('paymentname');
+            $table->string('accountnumber');
             $table->string('accountname');
             $table->string('bank');
+            $table->timestamps();
            
         });
     }

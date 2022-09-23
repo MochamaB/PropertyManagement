@@ -17,9 +17,10 @@ class CreateInvoicesTable extends Migration
             $table->increments('id');
             $table->string('invoiceno');
             $table->unsignedBigInteger('lease_id');
+            $table->string('utilitycategory_id');
+            $table->string('parent_utility',600)->nullable();
             $table->string('invoicetype');
             $table->string('amountdue');
-            $table->string('status');
             $table->string('expensetype');
             $table->timestamp("duedate");
             $table->timestamp("invoicedate"); 
@@ -28,6 +29,8 @@ class CreateInvoicesTable extends Migration
             $table->timestamps();
             $table->foreign('lease_id')
                   ->references('lease_id')->on('lease')->onDelete('cascade');
+            $table->foreign('utilitycategory_id')
+                    ->references('utilitycategory_id')->on('utilitycategory')->onDelete('cascade');
         });
     }
 

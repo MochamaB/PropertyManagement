@@ -45,21 +45,20 @@ class HousecategoriesController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-                'type' => 'required',
-                'price' => 'required|numeric',
-                'setdeposit' => 'required|numeric',
-                'apartment_id' => 'required',
-            ], [
-                'type.required' => '* House Type cannot be blank!',
-                'apartment_id.required' => '* Apartment cannot be blank!',
-                'price.required' => '* Price cannot be blank!',
-                'price.max'=> '* Rent Value is too long!',
-                'price.numeric' => '* Input numbers only. Remove comma!',
-                'setdeposit.required' => '* Deposit cannot be blank!',
-                'setdeposit.max'=> '* Deposit Value is too long!',
-                'setdeposit.numeric' => '* Input numbers only. Remove comma!'
+            'type' => 'required',
+            'rent' => 'required|numeric',
+            'setdeposit' => 'required|numeric',
+            'apartment_id' => 'required',
+        ], [
+            'type.required' => '* Type is required',
+            'rent.required' => '* Price is required',
+            'rent.numeric' => '* Input numbers only',
+            'rent.max'=> '* rent Value is too long',
+            'setdeposit.required' => '* Deposit is required',
+            'setdeposit.max'=> '* Deposit Value is too long',
+            'setdeposit.numeric' => '* Input numbers only'
 
-            ]);
+        ]);
 
             $housecategoriestype = Housecategories::where('type', $request->type)
                                                 ->where('apartment_id',$request->apartment_id)
@@ -75,7 +74,9 @@ class HousecategoriesController extends Controller
                 $housecategories = new Housecategories;
                 $housecategories->type = $request->input('type');
                 $housecategories->price = $request->input('price');
+                $housecategories->rent = $request->input('rent');
                 $housecategories->setdeposit = $request->input('setdeposit');
+                $housecategories->description = $request->input('description');
                 $housecategories->apartment_id = $request->input('apartment_id');
                 $housecategories->save();
                 return redirect('housecategories')->with('status','House Category Added Successfully');
@@ -118,17 +119,17 @@ class HousecategoriesController extends Controller
     {
         $validatedData = $request->validate([
                 'type' => 'required',
-                'price' => 'required|numeric',
+                'rent' => 'required|numeric',
                 'setdeposit' => 'required|numeric',
                 'apartment_id' => 'required',
             ], [
-                'type.required' => 'Type is required',
-                'price.required' => 'Price is required',
-                'price.max'=> 'Rent Value is too long',
-                'price.numeric' => 'Input numbers only',
-                'setdeposit.required' => 'Deposit is required',
-                'setdeposit.max'=> 'Deposit Value is too long',
-                'setdeposit.numeric' => 'Input numbers only'
+                'type.required' => '* Type is required',
+                'rent.required' => '* Price is required',
+                'rent.numeric' => '* Input numbers only',
+                'rent.max'=> '* rent Value is too long',
+                'setdeposit.required' => '* Deposit is required',
+                'setdeposit.max'=> '* Deposit Value is too long',
+                'setdeposit.numeric' => '* Input numbers only'
 
             ]);
         
@@ -137,7 +138,9 @@ class HousecategoriesController extends Controller
         $housecategories = housecategories::find($id);
         $housecategories->type = $request->input('type');
         $housecategories->price = $request->input('price');
+        $housecategories->rent = $request->input('rent');
         $housecategories->setdeposit = $request->input('setdeposit');
+        $housecategories->description = $request->input('description');
         $housecategories->apartment_id = $request->input('apartment_id');
 
     if($hcname->type == $request->get('type') ){

@@ -13,6 +13,7 @@ class Payments extends Model
            'invoice_id',
            'invoiceno',
             'paymenttype_id',
+            'payment_code',
             'receiptno',
             'reviewed_by',
             'amountpaid',
@@ -22,6 +23,6 @@ class Payments extends Model
     ];
     public function invoice()
     {
-        return $this->belongsTo(Invoice::class,'invoice_id');
+        return $this->belongsTo(Invoice::class);
     } 
 }

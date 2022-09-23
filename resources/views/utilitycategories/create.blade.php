@@ -4,20 +4,26 @@
 @section('content')
 
 <div class="container">
+<div class="container">
+    	<!---------  breadcrumbs ---------------->
+     <div class="row ">
+         <div class="col-auto col-md-10 ">
+             <nav aria-label="breadcrumb " class="first d-md-flex">
+                 <ol class="breadcrumb indigo lighten-6 first-1 shadow-lg mb-5 ">
+                     <li class="breadcrumb-item font-weight-bold"><a class="black-text text-uppercase " href="#" style="text-decoration: none !important;"><span>&nbsp;Operations</span></a><img class="ml-md-3" src="https://img.icons8.com/offices/30/000000/double-right.png" width="20" height="20"> </li>
+                     <li class="breadcrumb-item font-weight-bold"><a class="black-text text-uppercase" href="#" style="text-decoration: none !important;" ><span>Utility Categories</span></a><img class="ml-md-3" src="https://img.icons8.com/offices/30/000000/double-right.png" width="20" height="20"></li>
+                     <li class="breadcrumb-item font-weight-bold mr-0 pr-0"><a class="black-text active-1" href="#" style="text-decoration: none !important;"><span style="color:blue">Add Category</span></a> </li>
+                 </ol>
+             </nav>
+         </div>
+     </div>
+
+
+
+<!---------  breadcrumbs ---------------->
     <div class="row justify-content-center">
         <div class="col-md-6">
-        @if (session('statuserror'))
-				<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                      <strong>Error! </strong> {{ session('statuserror') }}.  <a href="{{ url('invoices/') }}" class="alert-link">Back to Invoices</a>
-                        <button type="button" class="btn-danger float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-				@endif
-				
-				  @if($errors->all())
-            <h6 class="alert alert-danger">Check Error messages in the form!</h6>
-            @endif
+        @include('layouts.partials.messages')	
 
             <div class="card">
                 <div class="card-header">
@@ -39,18 +45,28 @@
                                             @endif
                         </div>
                         <div class="form-group mb-3">
-                            <label for="">Bill Cycle:<span style="font-style:italic"> (Per Month or Per Unit)</span><span style="color:red;font-size:20px">*</span> </label>
-                            <select name="billcycle" class="formcontrol2">
-                                <option value="">Select cycle</option>
+                            <label for="">Utility Prefix<span style="color:red;font-size:20px">*</span></label>
+                            <input type="text" name="prefix" class="form-control" placeholder="Prefix on documents Eg. Invoice" value="{{ old('prefix') }}" />
+                            @if ($errors->has('prefix'))
+                                            <span class="text-danger" style="font-size:12px">{{ $errors->first('prefix') }}</span>
+                                            @endif
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="">Bill Cycle/Type:<span style="color:red;font-size:20px">*</span> </label>
+                            <select name="billcycle" id="billcycle" class="formcontrol2">
+                                <option value="">Select the Billing cycle/ Bill Type</option>
                                 <option value="Permonth">Per month</option>
                                 <option value="Units">Units Used</option>
+                                <option value="Maintenance">Maintenance Costs</option>
+                                <option value="Fromlease">Charges Drawn From Lease -(Rent, Deposit etc)</option>
+                                <option value="Clientcharge">Charged to a Client/Tenant</option>
                        
                             </select>
                             
                         </div>
-                        <div class="form-group mb-3">
-                            <label for="">Rate <span style="font-style:italic"> (Optional)</span></label>
-                            <input type="text" name="rate" class="form-control" value="{{ old('rate') }}"/>
+                        <div class="form-group mb-3" id="bill_cycle">
+                            <label for="">Rate <span style="color:red;font-size:20px">*</span></label>
+                            <input type="text" name="rate"  class="form-control" value="{{ old('rate') }}"/>
                             @if ($errors->has('rate'))
                                             <span class="text-danger" style="font-size:12px">{{ $errors->first('rate') }}</span>
                                             @endif
@@ -69,19 +85,21 @@
                         </div>
                         <div class="form-group mb-3" id="attach_to" style="display:none">
                         <label for="">Select Parent Invoice Place Utility:</label>
-                            <select name="parent_utility" id="attachto" class="formcontrol2" required>
+                            <select name="parent_utility"  class="formcontrol2">
                                 <option value="">Select</option>
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
+                            @foreach($parentutility as $item)
+                                <option value="{{$item->id}}">{{$item->name}}</option>
+                            @endforeach
+                          
                        
                             </select>
 
                               
                            
                         </div>
-                        <div class="form-group mb-3" id="input_to" style="display:none">
-                        <input type="text" id="attachinput" name="parent_utility" />
-                        </div>
+                        
+            
+                        
 
                         <div class="form-group mb-3">
                             <button type="submit" class="btn btn-primary">Save Utility Type</button>
@@ -103,13 +121,16 @@
             jQuery('#attach_to').hide(); 
         }
     });
-    jQuery("#attachto").change(function() {
-        if (jQuery(this).val() === '1'){ 
-            jQuery('#input_to').show();   
+    jQuery("#billcycle").change(function() {
+        if (jQuery(this).val() === 'Fromlease'||
+            jQuery(this).val() === 'Maintenance'||
+            jQuery(this).val() === 'Clientcharge'){ 
+            jQuery('#bill_cycle').hide();   
         } else {
-            jQuery('#input_to').hide(); 
+            jQuery('#bill_cycle').show(); 
         }
     });
+    
 });
 </script>
 

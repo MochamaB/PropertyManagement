@@ -169,7 +169,7 @@
             @endif  
             </div>
           </li>
-          @if( Auth::user()->can('users.view'))  
+          @if( Auth::user()->can('Users.view'))  
           <li class="nav-item nav-category">Settings</li>
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
@@ -180,7 +180,7 @@
           @endif
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
-              @if( Auth::user()->can('users.view'))  
+              @if( Auth::user()->can('Users.view'))  
                 <li class="nav-item"> <a class="nav-link" href="{{ url('/users') }}">All Users </a></li>
                 @endif
                 @if( Auth::user()->can('roles.show'))  

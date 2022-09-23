@@ -15,6 +15,9 @@ class Apartment extends Model
         'postalcode',
         'tel',
         'logo',
+        'location',
+        'authorized_person',
+        'signature_photo',
         
     ];
 

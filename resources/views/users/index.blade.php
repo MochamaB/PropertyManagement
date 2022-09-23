@@ -17,30 +17,13 @@
              </nav>
          </div>
      </div>
-
-     <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm float-end">Add new user</a></br>
-                    <h4>List of Users</h4> 
-        @if (session('status'))
-				<div class="alert alert-success alert-dismissible fade show" role="alert">
-                      <strong>Sucess! </strong> {{ session('status') }}.  
-                        <button type="button" class="btn-success float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-				@endif
-				
-				@if (session('statuserror'))
-				<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                      <strong>Error! </strong> {{ session('statuserror') }}. 
-                        <button type="button" class="btn-danger float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-				@endif      
-        
-        <div class="mt-2">
+     <div class="mt-2">
             @include('layouts.partials.messages')
         </div>
+     <a href="{{ route('Users.create') }}" class="btn btn-primary btn-sm float-end">Add new user</a></br>
+                    <h4>List of Users</h4>     
+        
+       
         <div class="table-responsive"> 
         <table id="table"                
                     data-toggle="table"
@@ -83,10 +66,10 @@
                                     </td>
                                     <td>
   
-                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm"><i class="mdi mdi-lead-pencil"></i></a>
+                                    <a href="{{ route('Users.edit', $user->id) }}" class="btn btn-primary btn-sm"><i class="mdi mdi-lead-pencil"></i></a>
                                    
                                    
-                                        {!! Form::open(['method' => 'DELETE','route' => ['users.destroy', $user->id],'style'=>'display:inline']) !!}
+                                        {!! Form::open(['method' => 'DELETE','route' => ['Users.destroy', $user->id],'style'=>'display:inline']) !!}
                                         {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm']) !!}
                                         {!! Form::close() !!}
                                     </td>

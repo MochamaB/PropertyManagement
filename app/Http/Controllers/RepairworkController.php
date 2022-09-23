@@ -55,8 +55,8 @@ class RepairworkController extends Controller
     public function viewrepairwork($year, $month)
     {
         $maintenance = Maintenance::join('lease','lease.id','=','maintenance.lease_id')
-                                  ->join('houses', 'houses.id', '=', 'lease.houseID')
-                                  ->join('tenants','tenants.id','=','lease.tenantID')
+                                  ->join('houses', 'houses.id', '=', 'lease.house_id')
+                                  ->join('tenants','tenants.id','=','lease.tenant_id')
                                   ->join('repairwork','repairwork.maintenance_id','=','maintenance.id')
                                   ->select('tenants.firstname','tenants.lastname','tenants.email','houses.housenumber',
                                             'maintenance.name','repairwork.assignedto','maintenance.created_at','maintenance.priority','maintenance.maintenanceno',
@@ -128,8 +128,8 @@ class RepairworkController extends Controller
     public function show($id)
     {
         $workorder = Maintenance::join('lease','lease.id','=','maintenance.lease_id')
-        ->join('houses', 'houses.id', '=', 'lease.houseID')
-        ->join('tenants','tenants.id','=','lease.tenantID')
+        ->join('houses', 'houses.id', '=', 'lease.house_id')
+        ->join('tenants','tenants.id','=','lease.tenant_id')
         ->join('repairwork','repairwork.maintenance_id','=','maintenance.id')
         ->select('tenants.firstname','tenants.lastname','tenants.email','houses.housenumber','tenants.idnumber','tenants.phonenumber',
                   'maintenance.name','repairwork.assignedto','maintenance.created_at','maintenance.priority','maintenance.description',

@@ -29,7 +29,7 @@ class RolesController extends Controller
      */
     public function index(Request $request)
     {   
-        $roles = Role::orderBy('id','DESC')->paginate(5);
+        $roles = Role::orderBy('id','DESC')->paginate(10);
         return view('roles.index',compact('roles'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
     }
@@ -145,6 +145,10 @@ class RolesController extends Controller
      */
     public function destroy(Role $role)
     {
+        if($role->id == 1 ){
+            return redirect()->route('roles.index')
+                    ->with('statuserror','Super Admin Role cannot be deleted');
+        }
         $role->delete();
 
         return redirect()->route('roles.index')

@@ -378,3 +378,9 @@ div.nodata{
     border-radius: 0.0rem;
     
 }
+
+label {
+    color: rgb(21, 22, 21);
+    font-weight: 600;
+    
+}

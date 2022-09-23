@@ -40,7 +40,7 @@
                 </div>
                 <div class="card-body">
                     
-                <form method="POST" action="{{ route('users.store') }}">
+                <form method="POST" action="{{ route('Users.store') }}">
                 @csrf
                 <div class="form-group mb-3">
                     <label for="name">Name </label>

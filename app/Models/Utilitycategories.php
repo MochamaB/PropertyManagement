@@ -11,9 +11,16 @@ class Utilitycategories extends Model
     protected $table = 'utilitycategory';
     protected $fillable = [
         'name',
+        'prefix',
         'billcycle',
         'rate',
         'create_invoice',
+        'parent_utility',
 
     ];
+
+    public function readings()
+    {
+        return $this->hasMany(Readings::class,'utilitycategory_id');
+    }
 }

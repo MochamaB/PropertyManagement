@@ -19,8 +19,11 @@ class CreateLeaseTable extends Migration
             $table->unsignedBigInteger('house_id');
             $table->unsignedBigInteger('tenant_id');
             $table->string('leaseno');
-            $table->decimal('actualdeposit');
-            $table->decimal('actualrent');
+            $table->decimal('deposit');
+            $table->decimal('rent');
+            $table->decimal('discount')->nullable();
+            $table->timestamp("startdate")->nullable();
+            $table->timestamp("enddate")->nullable();
             $table->string('status');
             $table->text('terms')->nullable();
             $table->timestamps();

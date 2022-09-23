@@ -22,13 +22,7 @@
 <!---------  breadcrumbs ---------------->
     <div class="row justify-content-center">
         <div class="col-md-7">
-            @if (session('status'))
-            <h6 class="alert alert-success">{{ session('status') }}</h6>
-            @endif
-            @if (session('statuserror'))
-                        <h6 class="alert alert-danger">{{ session('statuserror') }}</h6>
-            @endif
-
+        @include('layouts.partials.messages')	
             <div class="card">
                 <div class="card-header">
                     <a href="{{ url('paymenttypes') }}" class="btn btn-danger float-end">BACK</a>
@@ -62,18 +56,12 @@
                                     <span class="text-danger" style="font-size:12px">{{ $errors->first('accountname') }}</span>
                                 @endif
                         </div>
-                        <div class="form-group mb-3">
-                            <label for="">Code</label>
-                            <input type="text" name="code" class="form-control" placeholder="can be same as name or code" />
-                                @if ($errors->has('code'))
-                                    <span class="text-danger" style="font-size:12px">{{ $errors->first('code') }}</span>
-                                @endif
-                        </div>
+                       
                         <div class="form-group mb-3">
                             <label for="">Provider / Bank</label>
-                            <input type="text" name="provider" class="form-control" />
-                                @if ($errors->has('provider'))
-                                    <span class="text-danger" style="font-size:12px">{{ $errors->first('provider') }}</span>
+                            <input type="text" name="bank" class="form-control" />
+                                @if ($errors->has('bank'))
+                                    <span class="text-danger" style="font-size:12px">{{ $errors->first('bank') }}</span>
                                 @endif
                         </div>
                         <div class="form-group mb-3">

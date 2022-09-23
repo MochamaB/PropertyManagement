@@ -18,26 +18,8 @@
          </div>
      </div>
      <div class="row justify-content-center">
-        <div class="col-md-6">
-            @if (session('status'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                      <strong>Sucess! </strong> {{ session('status') }}. 
-                        <button type="button" class="btn-success float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>    
-            @endif
-             @if (session('statuserror'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                      <strong>Error! </strong> {{ session('statuserror') }}. 
-                        <button type="button" class="btn-danger float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>    
-            @endif
-             @if($errors->all())
-            <h6 class="alert alert-danger">Check Validation Errors in the form!</h6>
-            @endif
+        <div class="col-md-8">
+        @include('layouts.partials.messages')
 
             <div class="card">
                 <div class="card-header">
@@ -48,7 +30,7 @@
                 </div>
                 <div class="card-body">
 
-                    <form action="{{ url('add-apartments') }}" method="POST">
+                    <form action="{{ url('add-apartments') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="form-group mb-3">
@@ -87,6 +69,38 @@
                                 @endif
                         </div>
                         <div class="form-group mb-3">
+                            <label for="">Add Logo</label>
+                            <input type="file" name="logo" value="{{ old('logo') }}" class="form-control" id="logo" />
+                            <img id="logo-image-before-upload" src="{{ url('uploads/Images/noimage.jpg') }}"
+                                            style="height: 100px; width: 150px;">
+                                @if ($errors->has('logo'))
+                                    <span class="text-danger" style="font-size:12px;font-weight:700;">{{ $errors->first('logo') }}</span>
+                                @endif
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="">Location</label>
+                            <input type="text" name="location" value="{{ old('location') }}" class="form-control" />
+                                @if ($errors->has('location'))
+                                    <span class="text-danger" style="font-size:12px;font-weight:700;">{{ $errors->first('location') }}</span>
+                                @endif
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="">Name of Manager</label>
+                            <input type="text" name="authorized_person" value="{{ old('authorized_person') }}" class="form-control" />
+                                @if ($errors->has('authorized_person'))
+                                    <span class="text-danger" style="font-size:12px;font-weight:700;">{{ $errors->first('authorized_person') }}</span>
+                                @endif
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="">Add Signature</label>
+                            <input type="file" name="signature_photo" value="{{ old('signature_photo') }}" class="form-control" id="signature" />
+                            <img id="signature-image-before-upload" src="{{ url('uploads/Images/noimage.jpg') }}"
+                                            style="height: 100px; width: 150px;">    
+                            @if ($errors->has('signature_photo'))
+                                    <span class="text-danger" style="font-size:12px;font-weight:700;">{{ $errors->first('signature_photo') }}</span>
+                                @endif
+                        </div>
+                        <div class="form-group mb-3">
                             <button type="submit" class="btn btn-primary">Save Apartment</button>
                         </div>
 
@@ -98,4 +112,38 @@
     </div>
 
      </div>
+     <script type="text/javascript">
+      
+$(document).ready(function (e) {
+ 
+   
+   $('#logo').change(function(){
+            
+    let reader = new FileReader();
+ 
+    reader.onload = (e) => { 
+ 
+      $('#logo-image-before-upload').attr('src', e.target.result); 
+    }
+ 
+    reader.readAsDataURL(this.files[0]); 
+   
+   });
+
+   $('#signature').change(function(){
+            
+            let reader = new FileReader();
+         
+            reader.onload = (e) => { 
+         
+              $('#signature-image-before-upload').attr('src', e.target.result); 
+            }
+         
+            reader.readAsDataURL(this.files[0]); 
+           
+           });
+   
+});
+ 
+</script>
 @endsection

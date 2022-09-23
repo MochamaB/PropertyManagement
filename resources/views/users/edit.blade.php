@@ -20,12 +20,7 @@
 <!---------  breadcrumbs ---------------->
     
         <div class="col-8 grid-margin">
-                @if (session('status'))
-                    <h6 class="alert alert-success">{{ session('status') }}</h6>
-                 @endif
-                @if($errors->all())
-                <h6 class="alert alert-danger">Check Error messages in the form!</h6>
-                @endif
+        @include('layouts.partials.messages')
                 <div class="card">
                         <div class="card-header">
                             <br />
@@ -33,7 +28,7 @@
                             <h4>Edit User</h4>
                         </div>
                         <div class="card-body">
-                            <form method="post" action="{{ route('users.update', $user->id) }}">
+                            <form method="post" action="{{ route('Users.update', $user->id) }}">
                                 @method('patch')
                                 @csrf
                                 <div class="mb-3">
@@ -72,8 +67,6 @@
                                             <span class="text-danger text-left">{{ $errors->first('apartment_id') }}</span>
                                         @endif
                                     </div>
-                                    @else
-                                    <input type="hidden" name="apartment_id" value="{{$user->apartment_id}}"/>
                                     @endif
                                 <div class="mb-3">
                                     <label for="role" class="form-label">Role</label>

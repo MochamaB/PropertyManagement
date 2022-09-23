@@ -83,7 +83,7 @@
                                 <td>{{ $role->name }}</td> 
                                 <td></td>
                                 <td>{{\Carbon\Carbon::parse($role->created_at)->format('d M Y') }}</td>
-                                <td></td>
+                                <td>{{$role->permissions->count()}}</td>
                                 <td>
                                 <a class="btn btn-primary btn-sm" href="{{ route('roles.edit', $role->id) }}"><i class="mdi mdi-lead-pencil"></i></a>
                                 {!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', $role->id],'style'=>'display:inline']) !!}

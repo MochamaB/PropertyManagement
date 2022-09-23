@@ -30,11 +30,34 @@
                         </div>
                         <div class="form-group mb-3">
                                 <label>House Type</label>
-                                <select name="housecategoryid" value="{{$houses->housenumber}}" class="js-example-basic-single w-100" >
+                                <select name="housecategoryid"  class="formcontrol2" >
                                 @foreach($housecategories as $row)
-                                <option value="{{ $row->ID }}">{{ $row->type }}</option>
+                                <option value="{{ $row->id }}">{{ $row->type }}</option>
                                 @endforeach
                                 </select>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="">Title</label>
+                            <input type="text" name="title" value="{{$houses->title}}"class="form-control" />
+                                @if ($errors->has('title'))
+                                    <span class="text-danger" style="font-size:12px">{{ $errors->first('title') }}</span>
+                                @endif
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="">Meter Number</label>
+                            <input type="text" name="meternumber" value="{{$houses->meternumber}}"class="form-control" />
+                                @if ($errors->has('meternumber'))
+                                    <span class="text-danger" style="font-size:12px">{{ $errors->first('meternumber') }}</span>
+                                @endif
+                        </div>
+                        <div class="form-group mb-3"></br>
+                            <label for="">Description</label>
+                            <textarea class="form-control"  name="description" value="{{ old('description') }}" rows="4" cols="50">{{$houses->description}} </textarea>
+                          
+                                @if ($errors->has('description'))
+                                    <span class="text-danger" style="font-size:12px;font-weight:700;">{{ $errors->first('description') }}</span>
+                                @endif
                         </div>
                         
                           <div class="form-group mb-3">

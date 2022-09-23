@@ -53,7 +53,7 @@
                   <div id="all" class="tab-pane fade show {{ (request()->is('payments')) ? 'active' : '' }} ">
                   <h4>List of All Payments </h4>
                   
-                      @include('payments.indexGrouppayment')        
+                      @include('payments.indexGroupPayment')        
                 
                   </div>
                   
@@ -63,7 +63,7 @@
                     <div id="{{$item->paymentitem}}" class="tab-pane fade show {{ (request()->segment(3) == $item->paymentitem) ? 'active' : '' }} ">
                             <h4>List of All {{$item->paymentitem}} Payments </h4>
 
-                            @include('payments.indexGrouppayment')          
+                            @include('payments.indexGroupPayment')          
                     </div>
             @endforeach
  

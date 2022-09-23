@@ -43,12 +43,28 @@ class PaymenttypesController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'paymentname' => 'required',
+            'accountnumber' => 'required',
+            'accountname' => 'required',
+            
+            
+        ], [
+            'paymentname.required' => 'This field is required',
+            'accountnumber.required' => 'This field is required',
+            'accountname.required' => 'This field is required',
+            
+        ]);
+
+        if(Paymenttypes::where('paymentname',$request->paymentname)->exists()){
+
+            return redirect('/add-paymenttype')->with('statuserror','Payment type already in the system');  
+        }
         $paymenttype = new Paymenttypes;
         $paymenttype->paymentname = $request->input('paymentname');
         $paymenttype->accountnumber = $request->input('accountnumber');
         $paymenttype->accountname = $request->input('accountname');
-        $paymenttype->code = $request->input('code');
-        $paymenttype->provider = $request->input('provider');
+        $paymenttype->bank = $request->input('bank');
         $paymenttype->save();
         return redirect('/paymenttypes')->with('status','Payment Type Created Successfully');
     }
@@ -89,8 +105,7 @@ class PaymenttypesController extends Controller
         $paymenttype->paymentname = $request->input('paymentname');
         $paymenttype->accountnumber = $request->input('accountnumber');
         $paymenttype->accountname = $request->input('accountname');
-        $paymenttype->code = $request->input('code');
-        $paymenttype->provider = $request->input('provider');
+        $paymenttype->bank = $request->input('bank');
         $paymenttype->update();
         return redirect('/paymenttypes')->with('status','Payment Type Updated Successfully');
     }

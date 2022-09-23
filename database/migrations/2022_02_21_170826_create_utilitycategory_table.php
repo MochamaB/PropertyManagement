@@ -16,9 +16,11 @@ class CreateUtilitycategoryTable extends Migration
         Schema::create('utilitycategory', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('prefix');
             $table->string('billcycle');
             $table->decimal('rate')->nullable();
             $table->string('create_invoice');
+            $table->string('parent_utility');
             $table->timestamps();
         });
     }

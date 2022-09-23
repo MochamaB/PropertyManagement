@@ -29,10 +29,10 @@ class UsersController extends Controller
         $apartment = User::latest()->paginate(10);
 
         if (Auth::user()->id != 1) {
-           $users= User::where('apartment_id',Auth::user()->apartment_id)->latest()->paginate(10);
+           $users= User::where('apartment_id',Auth::user()->apartment_id)->get();
         }
         elseif(Auth::user()->id == 1){
-            $users = User::latest()->paginate(10);
+            $users = User::get();
         }
 
       
@@ -69,11 +69,18 @@ class UsersController extends Controller
 
         $role = Role::where('name', 'Guest')->first();
 
+    ///// Make sure that user that is registered from the registration page is assigned the right apartment ID
+        if($request->apartment_id == null){
+            $apartmentid = Auth::user()->apartment_id; ///Assigns the current users logged in apartment ID
+        }else{
+            $apartmentid = $request->apartment_id; //// Assigns apartment from edit form
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'apartment_id' => $request->apartment_id,
+            'apartment_id' => $apartmentid,
         ]);
         $user->assignRole($role);
 
@@ -135,8 +142,8 @@ class UsersController extends Controller
 
         
 
-        return redirect()->route('users.view')
-            ->withSuccess(__('User updated successfully.'));
+        return redirect()->route('Users.view')
+        ->with('status','User updated successfully.');
     }
 
     /**
@@ -150,13 +157,13 @@ class UsersController extends Controller
     {
         
         if($user->id == 1 ){
-            return redirect()->route('users.view')
+            return redirect()->route('Users.view')
                     ->with('statuserror','Super Admin user cannot be deleted');
         }
         
         $user->delete();
 
-        return redirect()->route('users.view')
-            ->withSuccess(__('User deleted successfully.'));
+        return redirect()->route('Users.view')
+            ->with('status','User deleted successfully.');
     }
 }

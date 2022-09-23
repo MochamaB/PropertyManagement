@@ -33,7 +33,7 @@
                     </tr>
 
                 </thead>
-        @if (Route::currentRouteName() == 'invoices.view')
+        @if (Route::currentRouteName() == 'Invoices.view')
                 <tbody style="padding-left:0; padding-right:0px">
                 
                 @foreach($yearinvoicegrouping as $key => $item)
@@ -41,7 +41,7 @@
                         <td>{{ $key+1 }}</td>
                         <td>{{$item->year}} </td>
                         <td>{{$item->invoicetype}}</td>
-                        <td>{{$item->noofinvoices}}</td>
+                        <td>{{$item->noofinvoices}} {{$item->amountdue}}</td>
                         @if($item->totalamountpaid == 0)
                         <td><span style="color:red"><b>NO PAYMENT</b></span></td>
                         @else

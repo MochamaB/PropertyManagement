@@ -21,23 +21,7 @@
 
 <!---------  breadcrumbs ---------------->
 
-                @if (session('status'))
-				<div class="alert alert-success alert-dismissible fade show" role="alert">
-                      <strong>Sucess! </strong> {{ session('status') }}.  <a href="{{ url('leases/') }}" class="alert-link">Go to Leases</a>
-                        <button type="button" class="btn-success float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-				@endif
-				
-				@if (session('statuserror'))
-				<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                      <strong>Error! </strong> {{ session('statuserror') }}.  <a href="{{ url('leases/') }}" class="alert-link">Go to Leases</a>
-                        <button type="button" class="btn-success float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-				@endif
+                @include('layouts.partials.messages')
             
                
                 <br />
@@ -93,7 +77,7 @@
                                 <td>{{ $item->housenumber }}</td>
                                 <td>{{ $item->housecategories->type }}</td>
                                 <td>{{ $item->status }}</td>                        
-                                <td>{{ $item->housecategories->price }}</td>
+                                <td>{{ $item->housecategories->rent }}</td>
                                 @if( Auth::user()->can('Apartments.create'))
                                         <td>{{$item->apartment->name}}</td>
                                         @endif

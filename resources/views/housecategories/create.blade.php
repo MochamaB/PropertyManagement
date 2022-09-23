@@ -22,25 +22,7 @@
 <!---------  breadcrumbs ---------------->
     <div class="row justify-content-center">
         <div class="col-md-6">
-            @if (session('status'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                      <strong>Sucess! </strong> {{ session('status') }}. 
-                        <button type="button" class="btn-success float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>    
-            @endif
-             @if (session('statuserror'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                      <strong>Error! </strong> {{ session('statuserror') }}. 
-                        <button type="button" class="btn-danger float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>    
-            @endif
-             @if($errors->all())
-            <h6 class="alert alert-danger">Check Validation Errors in the form!</h6>
-            @endif
+        @include('layouts.partials.messages')	
 
             <div class="card">
                 <div class="card-header">
@@ -56,21 +38,22 @@
 
                        
                         <div class="form-group mb-3">
-                            <label for="">House Type</label>
+                            <label for="">House Type <span style="color:red;font-size:20px">*</span></label>
                             <input type="text" name="type" value="{{ old('type') }}" class="form-control" />
                                 @if ($errors->has('type'))
                                     <span class="text-danger" style="font-size:12px;font-weight:700;">{{ $errors->first('type') }}</span>
                                 @endif
                         </div>
                         <div class="form-group mb-3">
-                            <label for="">Rent Payable</label>
+                            <label for="">Approximate Price of House</label>
                             <input type="text" name="price" value="{{ old('price') }}"  class="form-control" />
                                 @if ($errors->has('price'))
                                     <span class="text-danger" style="font-size:12px;font-weight:700;">{{ $errors->first('price') }}</span>
                                 @endif
                         </div>
                         @if( Auth::user()->can('Apartments.create'))
-                                                <label  style="font-size:13px;font-weight:500;">Apartment</label></br>
+                        <div class="form-group mb-3">
+                                                <label  style="font-size:13px;font-weight:500;">Apartment <span style="color:red;font-size:20px">*</span></label></br>
                                                 <select class="formcontrol2" name="apartment_id" required>
                                                     <option value="">Select Apartment</option>
                                                     @foreach($apartment as $item)
@@ -82,11 +65,27 @@
                                         @else
                                             <input type="hidden" name="apartment_id" value="{{ Auth::user()->apartment_id}}"/>            
                                         @endif
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="">Rent Payable <span style="color:red;font-size:20px">*</span></label>
+                            <input type="text" name="rent" value="{{ old('rent') }}"  class="form-control" />
+                                @if ($errors->has('rent'))
+                                    <span class="text-danger" style="font-size:12px;font-weight:700;">{{ $errors->first('rent') }}</span>
+                                @endif
+                        </div>
                         <div class="form-group mb-3"></br>
-                            <label for="">Expected Deposit</label>
+                            <label for="">Expected Deposit <span style="color:red;font-size:20px">*</span></label>
                             <input type="text" name="setdeposit" value="{{ old('setdeposit') }}"  class="form-control" />
                                 @if ($errors->has('setdeposit'))
                                     <span class="text-danger" style="font-size:12px;font-weight:700;">{{ $errors->first('setdeposit') }}</span>
+                                @endif
+                        </div>
+                        <div class="form-group mb-3"></br>
+                            <label for="">Description</label>
+                            <textarea class="form-control"  name="description" value="{{ old('description') }}" rows="4" cols="50"> </textarea>
+                          
+                                @if ($errors->has('description'))
+                                    <span class="text-danger" style="font-size:12px;font-weight:700;">{{ $errors->first('description') }}</span>
                                 @endif
                         </div>
                         <div class="form-group mb-3">

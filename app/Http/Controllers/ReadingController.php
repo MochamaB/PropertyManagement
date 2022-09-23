@@ -53,11 +53,12 @@ class ReadingController extends Controller
 
         return view('readings.create', compact('utilitycategories','house'));
     }
-    public function fetchleasedetails(Request $request)
+    public function fetchid(Request $request)
                     {
-                        $data = Lease::join('tenants','tenants.id','=','lease.tenantID')
-                                    ->where("lease.houseID",$request->houseID)
-                                    ->get(["lease.id","lease.leaseno","tenants.firstname","tenants.lastname","tenants.email"]);
+               
+                        $data = Readings::where("lease_id",$request->lease_id)
+                               ->where("created_at",">", Carbon::now()->subMonths(1)) 
+                                    ->get(["id","initialreading","lastreading","currentreading"]);
                         return response()->json($data);
                     }
 
@@ -80,6 +81,11 @@ class ReadingController extends Controller
                                                   ->withInput($request->input());
                 }  
 
+        $current = $request->input('currentreading');
+        $last = $request->input('lastreading');
+        $rate = Utilitycategories::where('id',$request->utilitycategory_id)->first('rate');
+                    
+      
 
         $prefix = "WRD";
         $recordnounique = IdGenerator::generate(['table' => 'readings','field' => 'recordno', 'length' => 9, 'prefix' =>$prefix]);
@@ -87,7 +93,6 @@ class ReadingController extends Controller
         $reading = new readings;
         $reading->utilitycategory_id =  $request->input('utilitycategory_id');
         $reading->lease_id = $request->input('lease_id');
-        $reading->meternumber = $request->input('meternumber');
         $reading->recordno = $recordnounique;
         $reading->initialreading = $request->input('initialreading');
         $reading->lastreading = $request->input('lastreading');
@@ -95,6 +100,7 @@ class ReadingController extends Controller
         $reading->fromdate = $request->input('fromdate');
         $reading->todate = $request->input('todate');
         $reading->recorded_by = Auth::user()->email;
+        $reading->amountdue =($request->input('currentreading')-$request->input('lastreading')) * $rate->rate;
         $reading->save();
 
        return redirect('/readings')->with('status','Reading Created Successfully');
@@ -107,7 +113,7 @@ class ReadingController extends Controller
                             ->join('lease', 'lease.id', '=', 'readings.lease_id')
                             ->join('houses','houses.id','=','lease.house_id')
                             ->join('tenants','tenants.id','=','Lease.tenant_id')
-                            ->select('houses.housenumber','tenants.firstname','tenants.lastname','readings.meternumber',
+                            ->select('houses.housenumber','tenants.firstname','tenants.lastname',
                                      'readings.lastreading','readings.currentreading','readings.fromdate',
                                      readings::raw('(readings.currentreading - readings.lastreading) * utilitycategory.rate as amountdue'))
                             ->whereYear('readings.fromdate', '=', Carbon::parse($year)->year)

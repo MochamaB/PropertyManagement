@@ -21,6 +21,9 @@ class CreateApartmentTable extends Migration
             $table->string('postalcode')->nullable();
             $table->string('tel')->nullable();
             $table->string('logo')->nullable();
+            $table->string('location')->nullable();
+            $table->string('authorized_person')->nullable();
+            $table->string('signature_photo')->nullable();
             $table->timestamps();
         });
     }

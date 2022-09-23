@@ -63,8 +63,8 @@ class PaymentsController extends Controller
 
      $details = Payments::join('invoices','invoices.id','=','payments.invoice_id')
                                 ->join('lease','lease.id','=','Invoices.lease_id')
-                                 ->join('houses', 'houses.id', '=', 'lease.houseID')
-                                 ->join('tenants','tenants.id','=','lease.tenantID')
+                                 ->join('houses', 'houses.id', '=', 'lease.house_id')
+                                 ->join('tenants','tenants.id','=','lease.tenant_id')
                                  ->join('paymenttypes','payments.paymenttype_id','=','paymenttypes.id')
                                  ->select('payments.id','payments.invoice_id','payments.receiptno','tenants.firstname','tenants.lastname','tenants.email','houses.housenumber','invoices.lease_id',
                                           'payments.created_at','invoices.status','invoices.duedate','invoices.invoicedate','payments.amountpaid',
@@ -121,6 +121,7 @@ class PaymentsController extends Controller
         $payments->invoiceno = $request->input('invoiceno');
         $payments->receiptno = $recordnounique.$request->input('invoiceno');
         $payments->paymenttype_id = $request->input('paymenttype_id');
+        $payments->payment_code = $request->input('payment_code');
         $payments->paymentitem = $request->input('paymentitem');
         $payments->amountpaid = $request->input('amountpaid');
         $payments->received_by = Auth::user()->email;
@@ -207,8 +208,8 @@ class PaymentsController extends Controller
         $payments = payments::find($id);
         $receiptdetails = payments::join('invoices','invoices.id','=','payments.invoice_id')
                                   ->join('lease','lease.id','=','invoices.lease_id')
-                                  ->join('tenants','tenants.id','=','lease.tenantID')
-                                  ->join('houses','houses.id','=','lease.houseID')
+                                  ->join('tenants','tenants.id','=','lease.tenant_id')
+                                  ->join('houses','houses.id','=','lease.house_id')
              ->select('payments.invoice_id','payments.invoiceno','payments.receiptno','payments.paymentitem','tenants.firstname','tenants.lastname'
                       ,'houses.housenumber','tenants.idnumber','tenants.email','tenants.phonenumber','invoices.invoicedate','invoices.duedate',
                       'payments.created_at','invoices.amountdue','payments.amountpaid')

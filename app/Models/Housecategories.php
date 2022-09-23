@@ -14,6 +14,7 @@ class Housecategories extends Model
         'apartment_id',
         'type',
         'price',
+        'rent',
         'setdeposit',
         'description',
     ];

@@ -15,10 +15,7 @@ class House extends Model
             'housenumber',
             'title',
             'description',
-            'bathrooms',
-            'bedrooms',
-            'Area',
-            'leasetype',
+            'meternumber',
             'status',
     ];
 //////////////// Relationships /////////////////////////////////////////////
@@ -35,6 +32,11 @@ class House extends Model
     public function users()
     {
         return $this->belongsToMany(User::class)->withPivot('house_id')->withTimestamps();
+    }
+
+    public function invoices()
+    {
+        return $this->hasManyThrough(Invoice::class, Lease::class,'house_id','lease_id','id','id');
     }
 
    ///////////////////// Scope and Filters ////////////////////

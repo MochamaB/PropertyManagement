@@ -78,8 +78,10 @@ class HouseController extends Controller
         ]);
         $houses = new house;
         $houses->housecategoryid = $request->input('housecategoryid');
-        $houses->housenumber = $request->input('housenumber');  
+        $houses->housenumber = $request->input('housenumber');
+        $houses->title = $request->input('title');
         $houses->description = $request->input('description');
+        $houses->meternumber = $request->input('meternumber');  
         $houses->status = $request->input('status');
         $houses->save();
 
@@ -155,12 +157,30 @@ class HouseController extends Controller
             'housenumber.required' => 'This field is required',
             'housecategoryid.required' => 'This field is required',
         ]);
+        ////// Get the current number of the house being edited
+        $hnum = House::where('id',$id)->select('housenumber')->first();
+
         $houses = house::find($id);
         $houses->housecategoryid = $request->input('housecategoryid');
         $houses->housenumber = $request->input('housenumber');
+        $houses->title = $request->input('title');
         $houses->description = $request->input('description');
-        $houses->update();
-        return redirect('/house')->with('status','House Updated Successfully');
+        $houses->meternumber = $request->input('meternumber');  
+        
+        ///// if housenumber being edited is equal to the house number entered then proceed
+        if($hnum->housenumber == $request->get('housenumber') ){
+            $houses->update();
+            return redirect('/house')->with('status','House Updated Successfully');
+        }
+        //// if house number entered exists in the system, create an error
+        elseif(House::where('housenumber', $request->housenumber)
+        ->exists()) {
+            return redirect('house')->with('statuserror','House is already in the system');
+        }
+        else{
+            $houses->update();
+            return redirect('/house')->with('status','House Updated Successfully');
+        }   
        
     }
 
@@ -174,10 +194,9 @@ class HouseController extends Controller
     {
         $houses = house::find($id);
 
-        $housesdelete = lease::where('houseID',$houses->id)->exists();
-        if ($housesdelete != null) {
-               return redirect('/house')->with('statuserror','Cannot delete. First Delete The Tenant attached to the House');
-            }
+        if(Lease::where('house_id',$id)->exists()){
+            return redirect('/tenants')->with('statuserror','Cannot delete house. Lease is still active');
+        }
         else{       
         $houses->delete();
         return redirect()->back()->with('status','House Deleted Successfully');
@@ -202,8 +221,10 @@ class HouseController extends Controller
 
         $houses = House::find($id);
         $userrole = Auth::user()->apartment_id;
+        //////// Get all users with the mentioned permission from the permission model ////
         $permissions = Permission::where('name','House.view_managers')->pluck('name')->toArray();
-     
+    
+        ////// This method is used to add users who have the role described above ///////////
         $user = User::with('roles')->FilterByUSerRole($userrole)->get()
             ->filter(function ($user) use ($permissions) {
                 foreach ($permissions as $permission) {

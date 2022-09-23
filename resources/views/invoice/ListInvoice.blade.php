@@ -43,7 +43,7 @@
                            
                 <div class="d-sm-flex align-items-center justify-content-between border-bottom">
                       <ul class="nav nav-tabs" role="tablist">
-                      @foreach($invoiceitems as $item)
+                      @foreach($categoryitems as $item)
                             <li class="nav-item">
                               <a class="nav-link  {{ (request()->segment(5) == $item->name) ? 'active' : '' }} " id="{{$item->name}}-tab" data-bs-toggle="tab" href="#{{$item->name}}" role="tab" aria-controls="overview" aria-selected="false">{{$item->name}} Invoices</a>
                             </li>
@@ -154,7 +154,7 @@
                                                             @if($item->payments->count()  == null )
                                                                 <a class="btn btn-dark btn-sm"><i class="mdi mdi-cash-usd"> </i> No Receipt Available<i class=""> ({{$item->payments->count()}})</i></a>
                                                             @else
-                                                            <a href="{{ url('details-receipt/'.$item->id. '/' . $item->lease_id. '/' . $item->invoicedate. '/' . $item->invoicetype) }}" class="btn btn-dark btn-sm"><i class="mdi mdi-cash-usd"></i></i>Receipt<i class="mdi mdi-cash-usd"> {{$item->payments->count()}}</i></a>
+                                                            <a href="{{ url('details-receipt/'.$item->id) }}" class="btn btn-dark btn-sm"><i class="mdi mdi-cash-usd"></i></i>Receipt<i class="mdi mdi-cash-usd"> {{$item->payments->count()}}</i></a>
                                                             @endif
                                                             <a href="{{ url('edit-invoice/'.$item->id) }}" class="btn btn-primary btn-sm"><i class="mdi mdi-lead-pencil"></i></a>
                                 

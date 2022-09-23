@@ -18,7 +18,7 @@
                     <p class="card-description">
                       Personal info
                     </p>
-                    <form action="{{ url('update-tenants/'.$tenants->ID) }}" method="POST">
+                    <form action="{{ url('update-tenants/'.$tenants->id) }}" method="POST">
                         @csrf
                         @method('PUT')
                             <div class="row">
@@ -145,7 +145,7 @@
                      
                     </div>
                     <div class="form-group mb-3" style="float:right">
-                            <button type="submit" class="btn btn-primary">update Tenant</button>
+                            <button type="submit" class="btn btn-primary">Update Tenant</button>
                         </div>
                   </form>
                 </div>

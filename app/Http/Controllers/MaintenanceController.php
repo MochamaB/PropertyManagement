@@ -47,8 +47,8 @@ class MaintenanceController extends Controller
     public function viewmaintenance($year,$month){
 
         $maintenance = Maintenance::join('lease','lease.id','=','maintenance.lease_id')
-                                  ->join('houses', 'houses.id', '=', 'lease.houseID')
-                                  ->join('tenants','tenants.id','=','lease.tenantID')
+                                  ->join('houses', 'houses.id', '=', 'lease.house_id')
+                                  ->join('tenants','tenants.id','=','lease.tenant_id')
                                   ->leftjoin('repairwork','repairwork.maintenance_id','=','maintenance.id')
                                   ->select('tenants.firstname','tenants.lastname','tenants.email','houses.housenumber',
                                             'maintenance.billtype','maintenance.raisedby','maintenance.created_at','maintenance.priority','maintenance.maintenanceno','maintenance.name',
@@ -67,7 +67,7 @@ class MaintenanceController extends Controller
      */
     public function create()
     {
-        $house = lease::join('houses', 'houses.id', '=', 'lease.houseID')
+        $house = lease::join('houses', 'houses.id', '=', 'lease.house_id')
         ->get(["houses.housenumber", "lease.id"]);
          
          $roles = Role::with('users')
@@ -87,7 +87,7 @@ class MaintenanceController extends Controller
     public function store(Request $request)
     {
        
-        $house = lease::join('houses', 'houses.id', '=', 'lease.houseID')
+        $house = lease::join('houses', 'houses.id', '=', 'lease.house_id')
                         ->where('lease.id',$request->lease_id)
                         ->select('houses.housenumber')
                         ->first();

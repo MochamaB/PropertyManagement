@@ -7,6 +7,7 @@ use App\Models\Tenant;
 use App\Models\house;
 use App\Models\Apartment;
 use App\Models\User;
+use App\Models\Lease;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Role;
@@ -161,9 +162,9 @@ class TenantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($ID)
+    public function edit($id)
     {
-        $tenants = Tenant::find($ID);
+        $tenants = Tenant::find($id);
         $house = house::select('housenumber','status','id')->where('status', 'empty')->get();
         return view('tenants.edit', compact('tenants','house'));
     }
@@ -175,7 +176,7 @@ class TenantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $ID)
+    public function update(Request $request, $id)
     {
                  $validatedData = $request->validate([
                         'idnumber' => 'required|numeric',
@@ -199,9 +200,10 @@ class TenantsController extends Controller
 
                     ]);
         
-                    $house = house::all();
+                    
+                    $temail = Tenant::where('id',$id)->select('email','idnumber','phonenumber')->first();
         
-                    $tenants = Tenant::find($ID);
+                    $tenants = Tenant::find($id);
                     $tenants->idnumber = $request->input('idnumber');
                     $tenants->firstname = $request->input('firstname');
                     $tenants->lastname = $request->input('lastname');
@@ -211,11 +213,29 @@ class TenantsController extends Controller
                     $tenants->company = $request->input('company');
                     $tenants->emergencyname = $request->input('emergencyname');
                     $tenants->emergencynumber = $request->input('emergencynumber');
-                    $tenants->update();
+                    
 
-                   
+        ///// if tenant being edited is equal to the tenant email entered then proceed
+        if($temail->email == $request->get('email') ){
+            $tenants->update();
+            return redirect('/tenants')->with('status','Tenant Updated Successfully');
+        }
+        //// if house number,id and phonenumber entered exists in the system, create an error
+        elseif(Tenant::where('email', $request->email)->exists()) {
+            return redirect('/tenants')->with('statuserror','Tenant is already in the system');
+        }
+        elseif(Tenant::where('idnumber', $request->idnumber)->exists()) {
+            return redirect('/tenants')->with('statuserror','Tenant is already in the system');
+        }
+        elseif(Tenant::where('phonenumber', $request->phonenumber)->exists()) {
+            return redirect('/tenants')->with('statuserror','Tenant is already in the system');
+        }
+        else{
+            $tenants->update();
+            return redirect('/tenants')->with('status','Tenant Updated Successfully');
+        }   
 
-                    return redirect('/tenants')->with('status','Tenant Updated Successfully');
+                    
                 
     }
 
@@ -227,9 +247,13 @@ class TenantsController extends Controller
      */
 
 
-    public function destroy($ID)
+    public function destroy($id)
     {
-        $tenants = Tenant::find($ID);
+        $tenants = Tenant::find($id);
+
+        if(Lease::where('tenant_id',$id)->exists()){
+            return redirect('/tenants')->with('statuserror','Cannot delete tenant. Lease is still active');
+        }
         $tenants->delete();
         return redirect('/tenants')->with('status','Tenant Deleted Successfully');
     }

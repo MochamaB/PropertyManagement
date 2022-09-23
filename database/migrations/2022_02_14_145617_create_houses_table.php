@@ -19,10 +19,7 @@ class CreateHousesTable extends Migration
             $table->string('housenumber',100);
             $table->string('title')->nullable();
             $table->text('description',200)->nullable();
-            $table->string('bathrooms')->nullable();
-            $table->string('bedrooms')->nullable();
-            $table->string('Area')->nullable();
-            $table->string('leasetype')->nullable();
+            $table->string('meternumber',100)->nullable();
             $table->string('status',100);
             $table->timestamps();
             $table->foreign('housecategoryid')

@@ -72,10 +72,14 @@
                                     <tr class="tableheading">
                                         <th></th>
                                         <th>Name</th>
+                                        <th>Logo</th>
                                         <th>Apartment No</th>
                                         <th>Email</th>
                                         <th>Tel No</th>
+                                        <th>Location</th>
+                                        <th>Manager</th>
                                         <th>No of houses</th>
+                                        <th>Signature</th>
                                         <th>Actions</th>
                                      </tr>
                                 </thead>
@@ -84,14 +88,24 @@
                                     <tr>
                                         <td>{{ $item->id }}</td>
                                         <td>{{ $item->name }}</td>
+                                        <td>
+                                            <img src="{{ url('uploads/Images/'.$item->logo) }}"
+                                            style="height: 100px; width: 150px;">
+	                                    </td>
                                         <td>{{ $item->apartmentno }}</td>
                                         <td>{{ $item->email }}</td>
                                         <td>{{ $item->tel }}</td>
+                                        <td>{{ $item->location }}</td>
+                                        <td>{{ $item->authorized_person }}</td>
                                         
                                         <td>@foreach($item->house as $house)
                                             {{$house->housenumber}}
                                             @endforeach
                                         </td>
+                                        <td>
+                                            <img src="{{ url('uploads/Images/'.$item->signature_photo) }}"
+                                            style="height: 100px; width: 150px;">
+	                                    </td>
                                         
                                         <td >
                      

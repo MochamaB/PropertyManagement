@@ -29,7 +29,7 @@ class CreatePaymentsTable extends Migration
             $table->timestamps();
             $table->foreign('invoice_id')
                   ->references('invoice_id')->on('invoices')->onDelete('cascade');
-                  $table->foreign('lease_id')
+            $table->foreign('lease_id')
                   ->references('lease_id')->on('lease')->onDelete('cascade');
         });
     }

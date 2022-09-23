@@ -26,8 +26,8 @@ class EmailController extends Controller
 {
     public function invoiceEmail(Request $request,$id,$lease_id,$invoicedate,$invoicetype){
         $invoicedetails= invoice::join('lease','lease.id','=','invoices.lease_id')
-        ->join('houses','houses.id','=','lease.houseID')
-        ->join('tenants','tenants.id','=','lease.tenantID')
+        ->join('houses','houses.id','=','lease.house_id')
+        ->join('tenants','tenants.id','=','lease.tenant_id')
         ->select('invoices.invoiceno','houses.housenumber','tenants.firstname','tenants.lastname','tenants.idnumber',
                 'tenants.email','tenants.phonenumber','invoices.invoicedate','Invoices.duedate','Invoices.status','invoices.amountdue','invoices.invoicetype')
                 ->with('payments')
@@ -53,7 +53,7 @@ class EmailController extends Controller
         $readings = readings::where('fromdate','=',$invoicedate)
         ->where('lease_id',$lease_id)
         ->first();
-        $watercharge = Utilitycategories:: where('name','Water Standing Charge')->first();
+        $watercharge = Utilitycategories:: where('name','Water Monthly Standing Charge')->first();
 
         $to = $request->input('mailto');
         $from = $request->input('mailfrom');
@@ -88,8 +88,8 @@ class EmailController extends Controller
         
         $receiptdetails = payments::join('invoices','invoices.id','=','payments.invoice_id')
                                   ->join('lease','lease.id','=','invoices.lease_id')
-                                  ->join('tenants','tenants.id','=','lease.tenantID')
-                                  ->join('houses','houses.id','=','lease.houseID')
+                                  ->join('tenants','tenants.id','=','lease.tenant_id')
+                                  ->join('houses','houses.id','=','lease.house_id')
              ->select('payments.lease_id','payments.invoiceno','payments.receiptno','payments.paymentitem','tenants.firstname','tenants.lastname'
                       ,'houses.housenumber','tenants.idnumber','tenants.email','tenants.phonenumber','invoices.invoicedate','invoices.duedate',
                       'payments.created_at','invoices.amountdue','payments.amountpaid')
@@ -130,8 +130,8 @@ class EmailController extends Controller
     public function workorderMail(Request $request, $maintenance_id){
 
         $workorder = Maintenance::join('lease','lease.id','=','maintenance.lease_id')
-        ->join('houses', 'houses.id', '=', 'lease.houseID')
-        ->join('tenants','tenants.id','=','lease.tenantID')
+        ->join('houses', 'houses.id', '=', 'lease.house_id')
+        ->join('tenants','tenants.id','=','lease.tenant_id')
         ->join('repairwork','repairwork.maintenance_id','=','maintenance.id')
         ->select('tenants.firstname','tenants.lastname','tenants.email','houses.housenumber','tenants.idnumber','tenants.phonenumber',
                   'maintenance.name','repairwork.assignedto','maintenance.created_at','maintenance.priority','maintenance.description',
@@ -165,8 +165,8 @@ class EmailController extends Controller
 
     public function previewEmail($id,$lease_id,$invoicedate,$invoicetype){
         $invoicedetails= invoice::join('lease','lease.id','=','invoices.lease_id')
-        ->join('houses','houses.id','=','lease.houseID')
-        ->join('tenants','tenants.id','=','lease.tenantID')
+        ->join('houses','houses.id','=','lease.house_id')
+        ->join('tenants','tenants.id','=','lease.tenant_id')
         ->select('invoices.invoiceno','houses.housenumber','tenants.firstname','tenants.lastname','tenants.idnumber',
                 'tenants.email','tenants.phonenumber','invoices.invoicedate','Invoices.duedate','Invoices.status','invoices.amountdue','invoices.invoicetype')
                 ->with('payments')
@@ -210,7 +210,7 @@ class EmailController extends Controller
     public function sentInvoiceEmails(Request $request){
 
         $sent = SentEmail::join('lease','lease.id','=','sentemails.lease_id')
-                        ->join('houses','houses.id','=','lease.houseID')
+                        ->join('houses','houses.id','=','lease.house_id')
                         ->select('sentemails.itemno','sentemails.recepientname','houses.housenumber','sentemails.created_at')
                         ->get();
 

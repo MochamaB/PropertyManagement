@@ -115,14 +115,14 @@
                             @if( Auth::user()->can('Apartments.create'))
                                 <td>{{ $item->apartment->name }}</td>
                             @endif
-                                <td><a href="{{ url('profile-tenants/'.$item->ID) }}" class="btn btn-danger btn-sm"><i class="mdi mdi-account-card-details"></i></a></td>
+                                <td><a href="{{ url('profile-tenants/'.$item->id) }}" class="btn btn-danger btn-sm"><i class="mdi mdi-account-card-details"></i></a></td>
                                 <td>
                                 @if( Auth::user()->can('Tenants.attach_managers'))
                                     <a href="{{ url('attach-tenantmanagers/'.$item->id) }}" class="btn btn-primary btn-sm"><i class="mdi mdi-account-multiple"></i>Managers</a>
                                 @endif
                                 @if( Auth::user()->can('Tenants.create'))    
-                                    <a href="{{ url('edit-tenants/'.$item->ID) }}" class="btn btn-primary btn-sm"><i class="mdi mdi-lead-pencil"></i></a>
-                                    <a href="{{ url('delete-tenants/'.$item->ID) }}" class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></a></td>
+                                    <a href="{{ url('edit-tenants/'.$item->id) }}" class="btn btn-primary btn-sm"><i class="mdi mdi-lead-pencil"></i></a>
+                                    <a href="{{ url('delete-tenants/'.$item->id) }}" class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></a></td>
                                 @endif    
                             </tr>
                             @endforeach

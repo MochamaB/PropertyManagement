@@ -37,7 +37,7 @@ Route::get('/', function () {
 
 
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');    
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard');    
 
 Route::group(['middleware' => ['auth','permission']], function () {
 
@@ -94,36 +94,37 @@ Route::get('delete-utilitycategories/{id}', [UtilitycategoriesController::class,
 Route::get('add-lease', [LeaseController::class, 'create'])->name('Lease.create');
 Route::post('add-lease', [LeaseController::class, 'store'])->name('Lease.store');
 Route::get('leases', [LeaseController::class, 'index'])->name('Lease.view');
-Route::get('edit-lease/{ID}', [LeaseController::class, 'edit'])->name('Lease.edit');
-Route::put('update-lease/{ID}', [LeaseController::class, 'update'])->name('Lease.update');
-Route::get('details-lease/{ID}', [LeaseController::class, 'details'])->name('Lease.details');
+Route::get('edit-lease/{id}', [LeaseController::class, 'edit'])->name('Lease.edit');
+Route::put('update-lease/{id}', [LeaseController::class, 'update'])->name('Lease.update');
+Route::get('details-lease/{id}', [LeaseController::class, 'details'])->name('Lease.details');
+Route::post('api/fetch-leaserent', [LeaseController::class, 'fetchleaserent']);
 
 Route::get('delete-lease/{ID}', [LeaseController::class, 'destroy'])->name('Lease.destroy');
 
 /*     Invoice Routes    */
-Route::get('add-invoice', [InvoiceController::class, 'create'])->name('invoices.create');
-Route::get('invoices', [InvoiceController::class, 'index'])->name('invoices.view');
-Route::get('invoice/{year}/{invoicetype}', [InvoiceController::class, 'indexmonth'])->name('invoices.view_month');
-Route::get('invoices/ListInvoices/{year}/{month}/{invoicetype}', [InvoiceController::class, 'ListInvoices'])->name('invoices.view_list');
+Route::get('add-invoice', [InvoiceController::class, 'create'])->name('Invoices.create');
+Route::get('invoices', [InvoiceController::class, 'index'])->name('Invoices.view');
+Route::get('invoice/{year}/{invoicetype}', [InvoiceController::class, 'indexmonth'])->name('Invoices.view_month');
+Route::get('invoices/ListInvoices/{year}/{month}/{invoicetype}', [InvoiceController::class, 'ListInvoices'])->name('Invoices.view_list');
            /* From Lease */
-Route::post('Fromlease-invoice', [InvoiceController::class, 'fromleaseInvoice'])->name('invoices.generaterent');
+Route::post('Fromlease-invoice', [InvoiceController::class, 'fromleaseInvoice'])->name('Invoices.generaterent');
 
             /* Permonth */
-Route::post('Permonth-invoice', [InvoiceController::class, 'permonthInvoice'])->name('invoices.generateTrash');
+Route::post('Permonth-invoice', [InvoiceController::class, 'permonthInvoice'])->name('Invoices.generateTrash');
 
 
             /* Units */
-Route::post('Units-invoice', [InvoiceController::class, 'unitsInvoice'])->name('invoices.generateWater');
+Route::post('Units-invoice', [InvoiceController::class, 'unitsInvoice'])->name('Invoices.generateWater');
 
             /* Maintenance */
-Route::post('generateMaintenance-invoice', [InvoiceController::class, 'maintenenaceinvoice'])->name('invoices.generateMaintenance.');
+Route::post('generateMaintenance-invoice', [InvoiceController::class, 'maintenenaceinvoice'])->name('Invoices.generateMaintenance.');
 
-Route::get('edit-invoice/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
-Route::put('update-invoice/{id}', [InvoiceController::class, 'update'])->name('invoices.update');
-Route::get('delete-invoice/{id}', [InvoiceController::class, 'destroy'])->name('invoices.delete');
+Route::get('edit-invoice/{id}', [InvoiceController::class, 'edit'])->name('Invoices.edit');
+Route::put('update-invoice/{id}', [InvoiceController::class, 'update'])->name('Invoices.update');
+Route::get('delete-invoice/{id}', [InvoiceController::class, 'destroy'])->name('Invoices.delete');
 Route::get('details-invoice/{id}/{lease_id}/{invoicedate}/{invoicetype}', [InvoiceController::class, 'details'])->name('invoices.details_preview');
 
-Route::get('delete-invoices/{ID}', [InvoiceController::class, 'destroy'])->name('invoices.destroy');
+Route::get('delete-invoices/{ID}', [InvoiceController::class, 'destroy'])->name('Invoices.destroy');
 Route::post('api/fetch-rent', [InvoiceController::class, 'fetchRent']);
 Route::post('api/fetch-utilities', [InvoiceController::class, 'fetchUtilities']);
 Route::post('api/fetch-utilitypayments', [InvoiceController::class, 'fetchUtilityPayments']);
@@ -160,21 +161,21 @@ Route::post('add-reading', [ReadingController::class, 'store'])->name('Reading.s
 Route::get('readings', [ReadingController::class, 'index'])->name('Readings.view');
 Route::get('edit-readings/{id}', [ReadingController::class, 'edit'])->name('Reading.edit');
 Route::put('update-reading/{id}', [ReadingController::class, 'update'])->name('Reading.edit');
-Route::post('api/fetch-leasedetails', [ReadingController::class, 'fetchleasedetails']);
+Route::post('api/fetch-id', [ReadingController::class, 'fetchid']);
 Route::get('readings/readingsperitem/{year}/{month}', [ReadingController::class, 'indexreadings'])->name('Readings.view_list');
 
 
 /**
          * User Routes
          */     
-Route::get('add-users', [UsersController::class, 'create'])->name('users.create');
-Route::post('add-users', [UsersController::class, 'store'])->name('users.store');
-Route::get('users', [UsersController::class, 'index'])->name('users.view');
-Route::get('/{user}/show', [UsersController::class, 'show'])->name('users.show');
-Route::get('{user}/edit', [UsersController::class, 'edit'])->name('users.edit');
-Route::patch('/{user}/update', [UsersController::class, 'update'])->name('users.update');
-Route::delete('/{user}/delete', [UsersController::class, 'destroy'])->name('users.destroy');
-Route::get('details-users', [UsersController::class, 'details']);            
+Route::get('add-users', [UsersController::class, 'create'])->name('Users.create');
+Route::post('add-users', [UsersController::class, 'store'])->name('Users.store');
+Route::get('users', [UsersController::class, 'index'])->name('Users.view');
+Route::get('/{user}/show', [UsersController::class, 'show'])->name('Users.show');
+Route::get('{user}/edit', [UsersController::class, 'edit'])->name('Users.edit');
+Route::patch('/{user}/update', [UsersController::class, 'update'])->name('Users.update');
+Route::delete('/{user}/delete', [UsersController::class, 'destroy'])->name('Users.destroy');
+Route::get('details-users', [UsersController::class, 'details'])->name('Users.details');           
          
         Route::resource('roles', RolesController::class);
         Route::resource('permissions', PermissionsController::class);
@@ -211,6 +212,7 @@ Route::get('delete-workorder/{id}', [RepairworkController::class, 'destroy'])->n
         
 });
 
+/*     Apartment Routes    */
 
 Route::get('add-apartments', [ApartmentController::class, 'create'])->name('Apartments.create');
 Route::post('add-apartments', [ApartmentController::class, 'store'])->name('Apartments.store');
@@ -220,7 +222,12 @@ Route::put('update-apartments/{id}', [ApartmentController::class, 'update'])->na
 
 Route::get('delete-apartments/{id}', [ApartmentController::class, 'destroy'])->name('Apartments.destroy');
 
+Route::post('generateinvoice', [InvoiceController::class, 'GenerateInvoice'])->name('Invoices.generate.');
 
+/////////////  Error Routes /////////////////
+Route::fallback(function(){
+    return view('errors.404');
+});
 
 
 

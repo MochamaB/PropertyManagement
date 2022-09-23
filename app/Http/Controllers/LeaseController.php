@@ -45,6 +45,14 @@ class LeaseController extends Controller
         return view('lease.create', compact('house','tenant','apartment'));
     }
 
+    public function fetchleaserent(Request $request)
+    {
+        $data = Housecategories::join('houses','houses.housecategoryid','=','housecategories.id')
+                    ->where("houses.id",$request->house_id)
+                    ->get(["houses.title","housecategories.rent","housecategories.setdeposit"]);
+        return response()->json($data);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -54,14 +62,14 @@ class LeaseController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'actualrent' => 'required|numeric',
-            'actualdeposit' => 'required|numeric'
+            'rent' => 'required|numeric',
+            'deposit' => 'required|numeric'
            
         ], [
-            'actualrent.required' => 'This field is required',
-            'actualrent.numeric' => 'Input Numbers Only',
-            'actualdeposit.required' => 'This field is required',
-            'actualdeposit.numeric' => 'Input Numbers Only',
+            'rent.required' => 'This field is required',
+            'rent.numeric' => 'Input Numbers Only',
+            'deposit.required' => 'This field is required',
+            'deposit.numeric' => 'Input Numbers Only',
         ]);
 
          
@@ -70,16 +78,25 @@ class LeaseController extends Controller
                                        ->withInput($request->input());
         }
 
+        ///// Make sure that user that is registered from the registration page is assigned the right apartment ID
+        if($request->apartment_id == null){
+            $apartmentid = Auth::user()->apartment_id; ///Assigns the current users logged in apartment ID
+        }else{
+            $apartmentid = $request->input('apartment_id'); //// Assigns apartment from edit form
+        }
+
         $prefix = "LSE-";
         $leasenounique = IdGenerator::generate(['table' => 'lease','field' => 'leaseno', 'length' => 7, 'prefix' =>$prefix]);
 
         $lease = new lease;
         $lease->leaseno = $leasenounique;
-        $lease->apartment_id = $request->input('apartment_id');
+        $lease->apartment_id = $apartmentid;
         $lease->house_id = $request->input('house_id');
         $lease->tenant_id = $request->input('tenant_id');  
-        $lease->actualdeposit = $request->input('actualdeposit');
-        $lease->actualrent = $request->input('actualrent');
+        $lease->deposit = $request->input('deposit');
+        $lease->rent = $request->input('rent');
+        $lease->startdate = $request->input('startdate');
+        $lease->enddate = $request->input('enddate');
         $lease->status = $request->input('status');
         $lease->terms = $request->input('terms');
         $lease->save();
@@ -125,15 +142,15 @@ class LeaseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($ID)
+    public function edit($id)
     {
-        $lease = Lease::find($ID);
-        $leasedetails = lease::join('tenants', 'tenants.id', '=', 'lease.tenantID')
-                      ->join('houses', 'houses.id', '=', 'lease.houseID')
+        $lease = Lease::find($id);
+        $leasedetails = lease::join('tenants', 'tenants.id', '=', 'lease.tenant_id')
+                      ->join('houses', 'houses.id', '=', 'lease.house_id')
                       ->join('housecategories','housecategories.id','=','houses.housecategoryid')
-                      ->select('lease.id','lease.leaseno','houses.housenumber','tenants.firstname','tenants.lastname','lease.actualrent',
-                                'lease.actualdeposit','housecategories.type','lease.created_at')
-                      ->where('lease.id',$ID)
+                      ->select('lease.id','lease.leaseno','houses.housenumber','tenants.firstname','tenants.lastname','lease.rent',
+                                'lease.deposit','lease.terms','housecategories.type','lease.created_at')
+                      ->where('lease.id',$id)
                       ->first();
 
         return view('lease.edit', compact('leasedetails','lease'));
@@ -148,7 +165,53 @@ class LeaseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'rent' => 'required|numeric',
+            'deposit' => 'required|numeric',
+            'status' => 'required|'
+           
+        ], [
+            'rent.required' => 'This field is required',
+            'rent.numeric' => 'Input Numbers Only',
+            'deposit.required' => 'This field is required',
+            'deposit.numeric' => 'Input Numbers Only',
+            'status.required' => 'This field is required',
+        ]);
+        
+        
+        $lease = Lease::find($id);
+        $lease->deposit = $request->input('deposit');
+        $lease->rent = $request->input('rent');
+        $lease->startdate = $request->input('startdate');
+        $lease->enddate = $request->input('enddate');
+        $lease->status = $request->input('status');
+        $lease->terms = $request->input('terms');
+        $lease->update();
+
+        /////Make sure that the houses table is filled with either Empty or Occupied
+        if($request->input('status') == 'Active'){ $hstatus = 'Occupied';}
+        else{ $hstatus ='Empty'; }
+
+            $housestatus = house::updateOrCreate(
+                [
+                    'id'    => $lease->house_id
+                ], 
+                [
+                    'status'  => $hstatus,    
+                ]
+        
+                );
+            $tenantstatus = Tenant::updateOrCreate(
+            [
+                'id'    => $lease->tenant_id
+            ], 
+            [
+                'status'  => $request->input('status').'_lease',    
+            ]
+
+            );
+
+        return redirect('/leases')->with('status','Lease Edit Successfully');
     }
 
     /**
@@ -165,11 +228,11 @@ class LeaseController extends Controller
     public function details($id)
     {
         $lease = Lease::find($id);
-        $leasedetails = lease::join('tenants', 'tenants.id', '=', 'lease.tenantID')
-                      ->join('houses', 'houses.id', '=', 'lease.houseID')
+        $leasedetails = lease::join('tenants', 'tenants.id', '=', 'lease.tenant_id')
+                      ->join('houses', 'houses.id', '=', 'lease.house_id')
                       ->join('housecategories','housecategories.id','=','houses.housecategoryid')
-                      ->select('lease.id','lease.leaseno','houses.housenumber','tenants.firstname','tenants.lastname','lease.actualrent',
-                                'lease.actualdeposit','housecategories.type','lease.created_at')
+                      ->select('lease.id','lease.leaseno','houses.housenumber','tenants.firstname','tenants.lastname','lease.rent',
+                                'lease.deposit','housecategories.type','lease.created_at')
                       ->where('lease.id',$id)
                       ->first();
         

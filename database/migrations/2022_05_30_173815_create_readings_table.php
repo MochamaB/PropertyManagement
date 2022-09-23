@@ -17,13 +17,13 @@ class CreateReadingsTable extends Migration
             $table->increments('id');
             $table->unsignedBigInteger('utilitycategory_id');
             $table->unsignedBigInteger('lease_id');
-            $table->string('meternumber')->nullable();
             $table->string('recordno');
             $table->decimal('initialreading');
             $table->decimal('lastreading');
             $table->decimal("currentreading");
-            $table->timestamp("fromdate"); 
-            $table->timestamp('todate');
+            $table->decimal("amountdue")->nullable();
+            $table->timestamp("fromdate")->nullable(); 
+            $table->timestamp('todate')->nullable();
             $table->string('recorded_by')->nullable();
             $table->timestamps();
             $table->foreign('utilitycategory_id')

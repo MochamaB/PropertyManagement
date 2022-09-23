@@ -29,7 +29,8 @@ class UtilitycategoriesController extends Controller
     public function create()
     {
        
-        return view('utilitycategories.create');
+	$parentutility = utilitycategories ::where('parent_utility','0')->get(); 
+         return view('utilitycategories.create',compact('parentutility'));
     }
 
     /**
@@ -54,10 +55,16 @@ class UtilitycategoriesController extends Controller
         }
 
         $utilitycategories = new utilitycategories;
-        $utilitycategories->name = Str::ucfirst($request->input('name'));
+        $utilitycategories->name = Str::ucfirst($request->input('name')); /// the Str function make sure the first letter is capital
+        $utilitycategories->prefix = $request->input('prefix');
         $utilitycategories->billcycle = $request->input('billcycle');
         $utilitycategories->rate = $request->input('rate');
         $utilitycategories->create_invoice = $request->input('create_invoice');
+	 if($request->input('parent_utility') == null){
+        $utilitycategories->parent_utility = '0';   
+        }else{
+        $utilitycategories->parent_utility = $request->input('parent_utility');
+        }
         $utilitycategories->save();
         return redirect('utilitycategories')->with('status','Utility Category Added Successfully');
     }

@@ -77,8 +77,9 @@
                                         <th data-sortable="true">Apartment</th>
                                         @endif
                                         <th>Type</th>
-                                        <th>Price</th>
+                                        <th>Rent</th>
                                         <th>Deposit</th>
+                                        <th>Price</th>
                                         <th>Actions</th>
                                      </tr>
                                 </thead>
@@ -90,8 +91,9 @@
                                         <td>{{$item->apartment->name}}</td>
                                         @endif
                                         <td>{{ $item->type }}</td>
-                                        <td>{{ $item->price }}</td>
+                                        <td>{{ $item->rent }}</td>
                                         <td>{{ $item->setdeposit }}</td>
+                                        <td>{{ $item->price }}</td>
                                         <td style=>
                                         @if( Auth::user()->can('Housecategories.edit'))
                                             <a href="{{ url('edit-housecategories/'.$item->id) }}" class="btn btn-primary btn-sm"><i class="mdi mdi-lead-pencil"></i></a>

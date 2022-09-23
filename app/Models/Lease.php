@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class Lease extends Model
 {
@@ -37,6 +38,15 @@ class Lease extends Model
         return $this->belongsTo(Apartment::class,'apartment_id');
     } 
 
+    public function readings()
+    {
+        return $this->hasMany(Readings::class,'lease_id');
+    } 
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class,'lease_id');
+    } 
+
     ///////////////////////
     public function scopeFilterByAdmin($query)
     {
@@ -56,9 +66,18 @@ class Lease extends Model
             ->join('tenants','tenants.id','=','lease.tenant_id')
             ->where('house_user.user_id',Auth::user()->id);
         }
-            
+          
+    
         
     }
+    public function scopeFilterReadings($query,$fromdate)
+    {
+       
+        return $query->leftjoin('readings','readings.lease_id', '=', 'lease.id')
+                     ->where('readings.fromdate',$fromdate)
+                    ->addSelect('readings.lease_id','readings.amountdue');
+    }
+    
 
 
 

@@ -21,23 +21,7 @@
 
 <!---------  breadcrumbs ---------------->
     
-                @if (session('status'))
-				<div class="alert alert-success alert-dismissible fade show" role="alert">
-                      <strong>Sucess! </strong> {{ session('status') }}.  <a href="{{ url('invoices/') }}" class="alert-link">Back to Invoices</a>
-                        <button type="button" class="btn-success float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-				@endif
-				
-				@if (session('statuserror'))
-				<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                      <strong>Error! </strong> {{ session('statuserror') }}.  <a href="{{ url('invoices/') }}" class="alert-link">Back to Invoices</a>
-                        <button type="button" class="btn-danger float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-				@endif            
+@include('layouts.partials.messages')	    
                 <br />
                        <button class="btn btn-primary btn-lg text-white mb-0 me-0" style="float:right" type="button" onclick="window.location='{{ url("/add-lease") }}'">
                          <i class="mdi mdi mdi-key"></i>Assign House</button>
@@ -87,8 +71,8 @@
                                 <td>{{ $item->leaseno }}</td>
                                 <td>{{ $item->house->housenumber }}</td>
                                 <td>{{ $item->tenant->firstname }} {{ $item->tenant->lastname }}</td>
-                                <td>{{ $item->actualrent }}</td>
-                                <td>{{ $item->actualdeposit }}</td>
+                                <td>{{ $item->rent }}</td>
+                                <td>{{ $item->deposit }}</td>
                                 <td>{{\Carbon\Carbon::parse($item->created_at)->format('d M Y') }}</td>
                                 <td>{{ $item->status }}</td>                         
                                 <td>

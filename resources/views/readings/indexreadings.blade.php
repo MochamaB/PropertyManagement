@@ -26,7 +26,6 @@
                                 <th></th>
                                 <th>Tenant</th>
                                 <th>House No:</th>
-                                <th>Meter No</th>
                                 <th>Last Reading</th>
                                 <th>Current Reading</th>
                                 <th>Units Used</th>
@@ -42,7 +41,6 @@
                                 <td>{{ $key+1 }}</td>
                                 <td>{{$item->firstname}} {{$item->lastname}}</td>
                                 <td>{{$item->housenumber}}</td>
-                                <td>{{$item->meternumber}}</td>
                                 <td>{{$item->lastreading}}</td>
                                 <td>{{$item->currentreading}}</td>
                                 <td>{{$item->currentreading - $item->lastreading}}</td>

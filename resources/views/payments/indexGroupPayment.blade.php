@@ -33,7 +33,7 @@
          </tr>
 
      </thead>
-@if (Route::currentRouteName() == 'payments')
+@if (Route::currentRouteName() == 'payments.view')
      <tbody style="padding-left:0; padding-right:0px">
      @foreach($yearpaymentgrouping as $key => $item)
          <tr>

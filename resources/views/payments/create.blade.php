@@ -22,12 +22,7 @@
 <!---------  breadcrumbs ---------------->
     <div class="row justify-content-center">
         <div class="col-md-10">
-            @if($errors->all())
-            <h6 class="alert alert-danger">Check Error messages in the form!</h6>
-            @endif
-			  @if (session('statuserror'))
-                        <h6 class="alert alert-danger">{{ session('statuserror') }}</h6>
-            @endif
+        @include('layouts.partials.messages')	
             <div class="card">
                 <div class="card-header">
                     <button type="" onclick="history.back()" class="btn btn-danger float-end">BACK</button>
@@ -56,9 +51,9 @@
                                     @endif
                             </div>
                             <div class="form-group mb-3">
-                                <label for="">Payment Method</label>
+                                <label for="">Payment Method <span style="color:red;font-size:20px">*</span></label>
 
-                                <select name="paymenttype_id" class="form-control" />
+                                <select name="paymenttype_id" class="formcontrol2" required/>
                                 <option value="">Select Payment Method</option>
                                     @foreach($paymenttypes as $row)
                                     <option value="{{$row->id}}">{{$row->paymentname}}</option>
@@ -66,6 +61,13 @@
                                 </select>
                                     @if ($errors->has('paymenttype_id'))
                                         <span class="text-danger" style="font-size:13px;font-weight:700">{{ $errors->first('paymenttype_id') }}</span>
+                                    @endif
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="">Payment Code</label>
+                                <input type="text" name="payment_code" value="{{old('payment_code')}}" class="form-control" />
+                                    @if ($errors->has('payment_code'))
+                                        <span class="text-danger" style="font-size:12px">{{ $errors->first('payment_code') }}</span>
                                     @endif
                             </div>
                         </div>
@@ -90,7 +92,7 @@
                                    
                             </div>
                             <div class="form-group mb-3">
-                                <label for="">Amount Paid</label>
+                                <label for="">Amount Paid <span style="color:red;font-size:20px">*</span></label>
                                 <input type="text" name="amountpaid" class="form-control" placeholder=" Amount Due - {{$invoice->amountdue - $invoice->payments->sum('amountpaid')}}" />
                                     @if ($errors->has('amountpaid'))
                                         <span class="text-danger" style="font-size:13px;font-weight:700">{{ $errors->first('amountpaid') }}</span>

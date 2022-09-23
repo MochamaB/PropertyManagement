@@ -22,17 +22,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
 
-        @if($errors->all())
-            <h6 class="alert alert-danger">Check Error messages in the form!</h6>
-            @endif
-            @if (session('statuserror'))
-				<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                      <strong>Error! </strong> {{ session('statuserror') }}. 
-                        <button type="button" class="btn-danger float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-				@endif
+       @include('layouts.partials.messages')
 
             <div class="card">
                 <div class="card-header">
@@ -62,6 +52,28 @@
                             <input type="text" name="housenumber" class="form-control" />
                                 @if ($errors->has('housenumber'))
                                     <span class="text-danger" style="font-size:12px">{{ $errors->first('housenumber') }}</span>
+                                @endif
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="">Title</label>
+                            <input type="text" name="title" class="form-control" />
+                                @if ($errors->has('title'))
+                                    <span class="text-danger" style="font-size:12px">{{ $errors->first('title') }}</span>
+                                @endif
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="">Meter Number</label>
+                            <input type="text" name="meternumber" class="form-control" />
+                                @if ($errors->has('meternumber'))
+                                    <span class="text-danger" style="font-size:12px">{{ $errors->first('meternumber') }}</span>
+                                @endif
+                        </div>
+                        <div class="form-group mb-3"></br>
+                            <label for="">Description</label>
+                            <textarea class="form-control"  name="description" value="{{ old('description') }}" rows="4" cols="50"> </textarea>
+                          
+                                @if ($errors->has('description'))
+                                    <span class="text-danger" style="font-size:12px;font-weight:700;">{{ $errors->first('description') }}</span>
                                 @endif
                         </div>
                         <div class="form-group mb-3">

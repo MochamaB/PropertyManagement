@@ -13,7 +13,6 @@ class Paymenttypes extends Model
             'paymentname',
             'accountnumber',
             'accountname',
-            'code',
             'bank',
             
     ];

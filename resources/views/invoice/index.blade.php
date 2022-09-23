@@ -21,23 +21,7 @@
 
 <!---------  breadcrumbs ---------------->
     
-@if (session('status'))
-				<div class="alert alert-success alert-dismissible fade show" role="alert">
-                      <strong>Sucess! </strong> {{ session('status') }}.  
-                        <button type="button" class="btn-success float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-				@endif
-				
-				@if (session('statuserror'))
-				<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                      <strong>Error! </strong> {{ session('statuserror') }}.  
-                        <button type="button" class="btn-danger float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-				@endif          
+@include('layouts.partials.messages')	        
                 <br />
                      
                        <br />
@@ -48,15 +32,15 @@
                       <li class="nav-item">
                               <a class="nav-link  {{ (request()->segment(1) == 'invoices') ? 'active' : '' }} " id="home-tab" data-bs-toggle="tab" href="#all" role="tab" aria-controls="overview" aria-selected="false">All Invoices</a>
                             </li>
-                @if (Route::currentRouteName() == 'invoices.view')
-                          @foreach($invoiceitems as $item)
+                @if (Route::currentRouteName() == 'Invoices.view')
+                          @foreach($categoryitems as $item)
                             <li class="nav-item">
                               <a class="nav-link  {{ (request()->segment(3) == '$item->name') ? 'active' : '' }} " id="{{$item->name}}-tab" data-bs-toggle="tab" href="#{{$item->name}}" role="tab" aria-controls="overview" aria-selected="false">{{$item->name}} Invoices</a>
                             </li>
                           @endforeach    
                       </ul>
-                @elseif (Route::currentRouteName() == 'invoices.view_month')
-                @foreach($invoiceitems as $item)
+                @elseif (Route::currentRouteName() == 'Invoices.view_month')
+                @foreach($categoryitems as $item)
                             <li class="nav-item">
                               <a class="nav-link  {{ (request()->segment(3) == $item->name) ? 'active' : '' }} " id="{{$item->name}}-tab" data-bs-toggle="tab" href="#{{$item->name}}" role="tab" aria-controls="overview" aria-selected="false">{{$item->name}} Invoices</a>
                             </li>
@@ -72,24 +56,21 @@
                             
                         </div>
             <!-------------------/////////////////////////-------------Invoice Tabs------ --------------------------------- ////////////////////// ------------------------------------>
-            @foreach($invoiceitems as $item)
+            @foreach($categoryitems as $item)
+
                     <div id="{{$item->name}}" class="tab-pane fade show {{ (request()->segment(3) == $item->name) ? 'active' : '' }} ">
+
                             <h4>List of {{$item->name}}  Invoices</h4>
-                          @if($item->rate == null)
-                                <form action="{{ url('Fromlease-invoice') }}" method="POST">
-                          @elseif($item->billcycle =='Permonth')
-                          <form action="{{ url('Permonth-invoice') }}" method="POST">
-                          @else($item->billcycle =='Units')
-                          <form action="{{ url('Units-invoice') }}" method="POST">
-                          @endif
-                                        @csrf
+ 
+                          <form action="{{ url('generateinvoice') }}" method="POST">
+                              @csrf
                                         </br></br>
                                         
-                                        <div class="input-group " >
+                                  <div class="input-group " >
                                         <div style="width:120px;border-right:5px solid #ffaf00;" ></div>
                                         <p style="font-weight:600;font-size:14px; border:0px" class="form-control">Invoice Month:&nbsp;&nbsp; </p>
                                             <div class="col-xs-3">
-                                             <input type="hidden" name="invoicetype" class="form-control" value="{{$item->name}}" required/>
+                                             <input type="hidden" name="utilcateg" class="form-control" value="{{$item->name}}" required/>
                                             <input type="date" name="invoicedate" class="form-control" placeholder="Invoice" required/>
                                             </div>
                                             
@@ -99,7 +80,7 @@
                                             </div>
                                             <span style="width:15px">&nbsp;</span>
                                                <button type="submit" class="btn btn-warning float-end">Generate {{$item->name}} invoices</button>
-                                        </div>
+                                  </div>
                                         <hr>
                                         
                                 </form>

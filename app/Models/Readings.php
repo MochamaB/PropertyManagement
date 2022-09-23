@@ -17,9 +17,19 @@ class Readings extends Model
         'initialreading',
         'lastreading',
         'currentreading',
+        'amountdue',
         'fromdate',
         'todate',
         'recorded_by',
         
     ];
+
+    public function utilitycategory()
+    {
+        return $this->belongsTo(Utilitycategories::class,'utilitycategory_id');
+    } 
+    public function lease()
+    {
+        return $this->belongsTo(Lease::class,'lease_id');
+    } 
 }
