@@ -23,4 +23,15 @@ class Utilitycategories extends Model
     {
         return $this->hasMany(Readings::class,'utilitycategory_id');
     }
+
+    public function children()
+{
+    return $this->hasMany(Utilitycategories::class, 'parent_utility');
+}
+
+public function parent()
+{
+    return $this->belongsTo(Utilitycategories::class, 'parent_utility');
+}
+
 }

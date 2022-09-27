@@ -162,7 +162,7 @@
                 <li class="nav-item"> <a class="nav-link" href="{{ url('/YearViewmaintenance') }}">All Repairs</a></li>
               </ul>
             @endif
-            @if( Auth::user()->can('Repair.view'))  
+            @if( Auth::user()->can('Repairwork.view'))  
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="{{ url('/YearViewrepairwork') }}">Job Work Orders</a></li>
               </ul>

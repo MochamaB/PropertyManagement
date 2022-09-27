@@ -20,10 +20,8 @@
 
 
 <!---------  breadcrumbs ---------------->
-    <div class="col-12 grid-margin">
-            @if($errors->all())
-            <h6 class="alert alert-danger">Check Error messages in the form!</h6>
-            @endif
+    <div class="col-7 grid-margin">
+    @include('layouts.partials.messages')
              <div class="card">
                      <div class="card-header">
                         <br />
@@ -37,9 +35,9 @@
                                 @csrf
                                       
                                          
-                                            <div class="form-group col-md-6 mb-3">
+                                            <div class="form-group  mb-3">
                                                 <label for="">Select House Number <span style="color:red;font-size:20px">*</span></label>
-                                                    <select  id="housenumber" class="form-control" name="lease_id">
+                                                    <select  id="housenumber" class="formcontrol2" name="lease_id">
                                                       <option>Select House Number</option>
                                                         @foreach ($house as $house)
                                                         <option value="{{$house->id}}">
@@ -48,9 +46,9 @@
                                                         @endforeach
                                                     </select>
                                             </div>
-                                            <div class="form-group col-md-6 mb-3">
+                                            <div class="form-group  mb-3">
                                                 <label for="">Priority <span style="color:red;font-size:20px">*</span></label>
-                                                <select  class="form-control" style="color:black" name="priority">
+                                                <select  class="formcontrol2" style="color:black" name="priority">
                                                 <option value="">Select Priority Level</option>
                                                 <option value="Extreme">Extreme (Must be Adressed in 24 hours)</option>
                                                 <option value="High">High</option>
@@ -61,9 +59,9 @@
                                                 <span class="text-danger" style="font-size:12px">{{ $errors->first('priority') }}</span>
                                             @endif
                                         </div>
-                                      <div class="form-group col-md-6 mb-3">
+                                      <div class="form-group  mb-3">
                                         <label for="">Bill Type <span style="color:red;font-size:20px">*</span></label>
-                                        <select  class="form-control" style="color:black" name="billtype">
+                                        <select  class="formcontrol2" style="color:black" name="billtype">
                                                 <option value="">Select Bill Type</option>
                                                 <option value="Expense">Expense</option>
                                                 <option value="Income">Income</option>
@@ -72,18 +70,18 @@
                                                 <span class="text-danger" style="font-size:12px">{{ $errors->first('billtype') }}</span>
                                             @endif
                                         </div>
-                                         <div class="form-group col-md-6 mb-3">
-                                        <label for="">Short Description <span style="color:red;font-size:20px">*</span></label>
-                                        <input type="text" name="name" class="form-control" placeholder="Bathroom,Kitchen,staircase" />
-                                            @if ($errors->has('name'))
-                                                <span class="text-danger" style="font-size:12px">{{ $errors->first('name') }}</span>
+                                         <div class="form-group  mb-3">
+                                        <label for="">Short Title <span style="color:red;font-size:20px">*</span></label>
+                                        <input type="text" name="title" value="{{ old('title') }}" class="form-control" placeholder="Bathroom,Kitchen,staircase" />
+                                            @if ($errors->has('title'))
+                                                <span class="text-danger" style="font-size:12px">{{ $errors->first('title') }}</span>
                                             @endif
                                         </div>
 
                               
-                                        <div class="form-group col-md-6 mb-3">
+                                        <div class="form-group  mb-3">
                                         <label for="">Description <span style="color:red;font-size:20px">*</span></label>
-                                        <textarea name="description" class="form-control" placeholder="Type Some Text.." required></textarea>
+                                        <textarea name="description"  class="form-control" placeholder="Type Some Text.." required>{{ old('description') }}</textarea>
                                             @if ($errors->has('description'))
                                                 <span class="text-danger" style="font-size:12px">{{ $errors->first('description') }}</span>
                                             @endif

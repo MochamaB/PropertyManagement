@@ -40,15 +40,15 @@
                      <!-- Invoice Company Details -->
                      <div class="container">
                             <div class="row">
-                                    <div class="col-3"><a class="navbar-brand">
-                                        <img src="{{ asset('Templateassets/img/logo2edit.png') }}" alt="" style="width:220px; height:170px;margin-left:-20px;opacity:1.5;"></a>
+                            <div class="col-3"><a class="navbar-brand">
+                                        <img src="{{ asset('uploads/Images/'.$receiptdetails->logo) }}" alt="" style="width:220px; height:170px;margin-left:-20px;opacity:1.5;"></a>
                                         </div>
-                                    <div class="col-3 ">
+                                    <div class="col-4 ">
                                         <ul class="ml-2 px-0 list-unstyled">
-                                            <li class="text-bold-800">MJ Hinga Properties</li>
-                                            <li>Adress details,</li>
-                                            <li>Nairobi,</li>
-                                            <li>KENYA</li>
+                                            <li class="text-bold-800">{{$receiptdetails->name}}</li>
+                                            <li>{{$receiptdetails->postalcode}},</li>
+                                            <li>{{$receiptdetails->location}},</li>
+                                            <li>{{$receiptdetails->email}}</li>
                                           </ul>
                                     </div>
                                 <div class="col " style="text-align: right;">
@@ -81,7 +81,6 @@
                                    <div class="col" style="text-align:right;">
                                         <p><b>Invoice Due Date :</b> {{ \Carbon\Carbon::parse($receiptdetails->duedate)->format('d M Y')}}  </p>
                                         <p><b>Invoice Date :</b> {{\Carbon\Carbon::parse($receiptdetails->invoicedate)->format('d M Y')}}</p>
-                                        <p><b>Invoice Amount Due :</b><span style="color:red; font-weight:700;font-size:15px">KSH {{$receiptdetails->amountdue}}</span></p>
                                         <p><b>Receipt For :</b> {{$receiptdetails->paymentitem}}</p>
                                         <p style="color:red; font-weight:700;font-size:16px;"></p>
                                    </div>

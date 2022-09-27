@@ -52,51 +52,43 @@
                                             @endif
                         </div>
                         <div class="form-group mb-3">
-                            <label for="">Bill Cycle/Type:<span style="color:red;font-size:20px">*</span> </label>
-                            <select name="billcycle" id="billcycle" class="formcontrol2">
-                                <option value="">Select the Billing cycle/ Bill Type</option>
-                                <option value="Permonth">Per month</option>
-                                <option value="Units">Units Used</option>
-                                <option value="Maintenance">Maintenance Costs</option>
-                                <option value="Fromlease">Charges Drawn From Lease -(Rent, Deposit etc)</option>
-                                <option value="Clientcharge">Charged to a Client/Tenant</option>
-                       
-                            </select>
-                            
-                        </div>
-                        <div class="form-group mb-3" id="bill_cycle">
-                            <label for="">Rate <span style="color:red;font-size:20px">*</span></label>
-                            <input type="text" name="rate"  class="form-control" value="{{ old('rate') }}"/>
-                            @if ($errors->has('rate'))
-                                            <span class="text-danger" style="font-size:12px">{{ $errors->first('rate') }}</span>
-                                            @endif
-                        </div>
-                        <div class="form-group mb-3">
                             <label for="">Create Invoice For Category: <span style="color:red;font-size:20px">*</span></label>
-                            <select name="create_invoice" id="attachto" class="formcontrol2" required>
+                            <select name="create_invoice" id="createinvoice" class="formcontrol2" required>
                                 <option value="">Select</option>
                                 <option value="1">Yes</option>
                                 <option value="0">No</option>
-                       
                             </select>
-   
-                      
-                            
                         </div>
-                        <div class="form-group mb-3" id="attach_to" style="display:none">
-                        <label for="">Select Parent Invoice Place Utility:</label>
+                        <div class="form-group mb-3" id="parentname" style="display:none">
+                        <label for=""><span style="color:red;font-size:20px">*</span>Select Parent Invoice Place Utility:<span style="color:red;font-size:20px">*</span></label>
                             <select name="parent_utility"  class="formcontrol2">
                                 <option value="">Select</option>
                             @foreach($parentutility as $item)
                                 <option value="{{$item->id}}">{{$item->name}}</option>
                             @endforeach
-                          
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="">Bill Cycle/Type:<span style="color:red;font-size:20px">*</span> </label>
+                            <select name="billcycle" id="billcycle" class="formcontrol2">
+                                <option value="">Select the Billing cycle/ Bill Type</option>
+                                <option value="Permonth" id="Permonth">Per month</option>
+                                <option value="Units" id="Units">Units Used</option>
+                                <option value="Maintenance" id="Maintenance">Maintenance Costs</option>
+                                <option value="Fromlease" id="Fromlease">Charges Drawn From Lease -(Rent, Deposit etc)</option>
+                              
                        
                             </select>
-
-                              
-                           
+                            
                         </div>
+                        <div class="form-group mb-3" id="rate">
+                            <label for=""><span style="color:red;font-size:20px">*</span>Rate <span style="color:red;font-size:20px">*</span></label>
+                            <input type="text" name="rate"  class="form-control" value="{{ old('rate') }}"/>
+                            @if ($errors->has('rate'))
+                                            <span class="text-danger" style="font-size:12px">{{ $errors->first('rate') }}</span>
+                                            @endif
+                        </div>
+                        
                         
             
                         
@@ -114,22 +106,27 @@
 </div>
 <script>
     jQuery(document).ready(function() {
-    jQuery("#attachto").change(function() {
+    jQuery("#createinvoice").change(function() {
         if (jQuery(this).val() === '0'){ 
-            jQuery('#attach_to').show();   
+            jQuery('#parentname').show();   
+            jQuery('#Units').hide();
+            jQuery('#Fromlease').hide();
         } else {
-            jQuery('#attach_to').hide(); 
+            jQuery('#parentname').hide();
+           
         }
     });
+    
     jQuery("#billcycle").change(function() {
         if (jQuery(this).val() === 'Fromlease'||
-            jQuery(this).val() === 'Maintenance'||
-            jQuery(this).val() === 'Clientcharge'){ 
-            jQuery('#bill_cycle').hide();   
+            jQuery(this).val() === 'Maintenance'){ 
+            jQuery('#rate').hide();   
         } else {
-            jQuery('#bill_cycle').show(); 
+            jQuery('#rate').show(); 
         }
     });
+
+    
     
 });
 </script>

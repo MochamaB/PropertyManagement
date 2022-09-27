@@ -93,7 +93,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="">Amount Paid <span style="color:red;font-size:20px">*</span></label>
-                                <input type="text" name="amountpaid" class="form-control" placeholder=" Amount Due - {{$invoice->amountdue - $invoice->payments->sum('amountpaid')}}" />
+                                <input type="text" name="amountpaid" class="form-control" value =" {{($invoice->amountdue + $parentutilsum->sum('amount')) - $invoice->payments->sum('amountpaid')}}" />
                                     @if ($errors->has('amountpaid'))
                                         <span class="text-danger" style="font-size:13px;font-weight:700">{{ $errors->first('amountpaid') }}</span>
                                     @endif

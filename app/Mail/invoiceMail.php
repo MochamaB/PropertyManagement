@@ -7,12 +7,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class invoiceMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $invoicedetails,$previousmonthsbalance,$paymenttypes,$utilitycat,$readings,$watercharge,$paymentsinfo;
+    public $invoice,$previousmonthsbalance,$readings,$parentutilsum,$total,$paymenttype;
     
     /**
      * Create a new message instance.
@@ -20,15 +21,15 @@ class invoiceMail extends Mailable
      * @return void
      * 
      */
-    public function __construct($invoicedetails,$previousmonthsbalance,$paymenttypes,$utilitycat,$readings,$watercharge,$paymentsinfo)
+    public function __construct($invoice,$previousmonthsbalance,$readings,$parentutilsum,$total,$paymenttype)
     {
-        $this->invoicedetails = $invoicedetails;
+        $this->invoice = $invoice;
         $this->previousmonthsbalance = $previousmonthsbalance;
-        $this->paymenttypes = $paymenttypes;
-        $this->utilitycat = $utilitycat;
+        $this->paymenttype = $paymenttype;
+        $this->parentutilsum = $parentutilsum;
         $this->readings = $readings;
-        $this->watercharge = $watercharge;
-        $this->paymentsinfo = $paymentsinfo;
+        $this->total = $total;
+
     }
 
     /**
@@ -38,8 +39,8 @@ class invoiceMail extends Mailable
      */
     public function build()
     {
-        return $this->from(Auth::user()->email, 'Machliz Focus Technology')
-                    ->subject('Rent Invoice')
+        return $this->from($this->invoice->apartments->email,$this->invoice->apartments->name)
+                    ->subject($this->invoice->invoicetype.' Invoice for '.Carbon::parse( $this->invoice->invoicedate)->format('d M Y'))
                     ->view('emails.invoiceEmailView');
     }
 }

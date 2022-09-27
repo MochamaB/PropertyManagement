@@ -67,7 +67,7 @@ class PaymentsController extends Controller
                                  ->join('tenants','tenants.id','=','lease.tenant_id')
                                  ->join('paymenttypes','payments.paymenttype_id','=','paymenttypes.id')
                                  ->select('payments.id','payments.invoice_id','payments.receiptno','tenants.firstname','tenants.lastname','tenants.email','houses.housenumber','invoices.lease_id',
-                                          'payments.created_at','invoices.status','invoices.duedate','invoices.invoicedate','payments.amountpaid',
+                                          'payments.created_at','invoices.duedate','invoices.invoicedate','payments.amountpaid',
                                           'payments.invoiceno','invoices.invoicetype','paymenttypes.paymentname'
                                     )
                                     ->where('payments.paymentitem',$paymentitem)
@@ -88,9 +88,11 @@ class PaymentsController extends Controller
     public function create($id,$lease_id,$invoicedate,$invoicetype)
     {
          $invoice = invoice::with('payments')->find($id);
+
+         $parentutilsum = collect($invoice->parent_utility);
          
          $paymenttypes = paymenttypes::all();
-        return view('payments.create', compact('invoice','paymenttypes')); 
+        return view('payments.create', compact('invoice','paymenttypes','parentutilsum')); 
     }
 
     /**
@@ -127,7 +129,12 @@ class PaymentsController extends Controller
         $payments->received_by = Auth::user()->email;
         $payments->invoicedate = $request->input('invoicedate');
         $payments->save();
-        return redirect('/payments')->with('status','Payment Made Successfully');
+
+        $date = \Carbon\Carbon::parse($payments->invoicedate);
+        $month = \Carbon\Carbon::parse($payments->invoicedate)->format('M');
+        $year = $date->year;
+        
+        return redirect('payments/Listpayments/'.$year. '/' . $month. '/' . $payments->paymentitem)->with('status','Payment Made Successfully');
     }
 
     /**
@@ -205,14 +212,18 @@ class PaymentsController extends Controller
 
     public function details($id,$lease_id,$invoicedate,$invoicetype)
     {
-        $payments = payments::find($id);
+        $payment = payments::with(['houses','leases','apartments','tenants','invoices']) 
+                            ->find($id);
+
         $receiptdetails = payments::join('invoices','invoices.id','=','payments.invoice_id')
                                   ->join('lease','lease.id','=','invoices.lease_id')
                                   ->join('tenants','tenants.id','=','lease.tenant_id')
                                   ->join('houses','houses.id','=','lease.house_id')
+                                  ->join('apartment','apartment.id','=','lease.apartment_id')
              ->select('payments.invoice_id','payments.invoiceno','payments.receiptno','payments.paymentitem','tenants.firstname','tenants.lastname'
-                      ,'houses.housenumber','tenants.idnumber','tenants.email','tenants.phonenumber','invoices.invoicedate','invoices.duedate',
-                      'payments.created_at','invoices.amountdue','payments.amountpaid')
+                      ,'houses.housenumber','tenants.idnumber','tenants.email','tenants.phonenumber','invoices.invoicedate','invoices.duedate','invoices.invoiceno',
+                      'payments.created_at','invoices.amountdue','payments.amountpaid','apartment.name','apartment.logo','apartment.postalcode','apartment.location',
+                      'apartment.email')
                                   ->where('payments.invoice_id',$id)
                                   ->first();
         $receiptpayments = payments::select('invoiceno','created_at','receiptno','amountpaid')
@@ -220,9 +231,10 @@ class PaymentsController extends Controller
                                    ->where('invoice_id',$id)
                                    ->groupBy('invoiceno','created_at','receiptno','amountpaid')
                                     ->get();
+        $parentutilsum = collect($receiptdetails->parent_utility);
 
        
 
-    return view('payments.receiptdetails',compact('receiptdetails','receiptpayments'));
+    return view('payments.receiptdetails',compact('receiptdetails','receiptpayments','payment','parentutilsum'));
     }
 }

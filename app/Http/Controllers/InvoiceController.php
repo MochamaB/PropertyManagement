@@ -79,7 +79,7 @@ class InvoiceController extends Controller
                                  ->join('tenants','tenants.id','=','lease.tenant_id')
                                  ->select('invoices.id','tenants.firstname','tenants.lastname','tenants.email','houses.housenumber','invoices.lease_id',
                                           'invoices.created_at','invoices.duedate','invoices.invoicedate','invoices.amountdue',
-                                          'invoices.invoiceno','invoices.invoicetype'
+                                          'invoices.invoiceno','invoices.invoicetype','invoices.parent_utility'
                                     )
                                     ->with('payments')
                                     ->where('invoices.invoicetype',$invoicetype)
@@ -89,8 +89,13 @@ class InvoiceController extends Controller
                                     
                                           ->get();
         $invoice = Invoice::where('invoices.invoicetype',$invoicetype)->first();
+
+        foreach($details as $item){
+            $parentutilsum = collect($item->parent_utility);
+            
+        }
       
-         return view('invoice.ListInvoice',compact('details','invoice','categoryitems'));
+         return view('invoice.ListInvoice',compact('details','invoice','categoryitems','parentutilsum'));
     }
 
     /**
@@ -107,6 +112,7 @@ class InvoiceController extends Controller
              //////////////////////////////////////////////////  GENERATE from Lease INVOICE     ////////////////////////////////////////////////////
     public function GenerateInvoice(Request $request)
     {
+        /// Used to check if an invoice for the month has already been generated
         $paymentmonth = invoice::where('invoicetype','=',$request->utilcateg)
                                ->whereMonth('invoicedate', '=',Carbon::parse($request->invoicedate)->month)
                                ->whereYear('invoicedate', '=',Carbon::parse($request->invoicedate)->year)
@@ -127,6 +133,9 @@ class InvoiceController extends Controller
                                 ->where('utilitycategory.name',$request->utilcateg)
                                 ->select('UT2.name','UT2.rate','UT2.billcycle')
                                 ->get();
+        $maintenance = Maintenance::whereMonth('created_at', '=',Carbon::parse($request->invoicedate)->month)
+                                ->whereYear('created_at', '=',Carbon::parse($request->invoicedate)->year)
+                                ->exists();
                 
            
         
@@ -140,6 +149,18 @@ class InvoiceController extends Controller
                                  ->whereYear('fromdate', '=',Carbon::parse($invoicedate)->year)
                                  ->select('lease.id','houses.housenumber','readings.amountdue')
                                  ->get();
+         }
+         elseif($utildetails->billcycle =='Maintenance'){
+            $leasedetails = Lease::join('maintenance','maintenance.lease_id','=','lease.id')
+                                        ->join('repairwork','repairwork.maintenance_id','=','maintenance.id')
+                                        ->join('houses', 'houses.id', '=', 'lease.house_id')
+                                        ->whereMonth('maintenance.created_at', '=',Carbon::parse($invoicedate)->month)
+                                        ->whereYear('maintenance.created_at', '=',Carbon::parse($invoicedate)->year)
+                                        ->where('billtype','Income')
+                                        ->select('lease.id','repairwork.amountspent','repairwork.amountpaid','houses.housenumber')
+                                        ->selectRaw('(repairwork.amountspent + repairwork.amountpaid) as totalamount')
+                                        ->get();
+
          }
           else{              
                 $leasedetails = lease::join('houses','houses.id','=','lease.house_id')               
@@ -165,6 +186,14 @@ class InvoiceController extends Controller
                          } 
                          else{ 
                                 $amountdue = $utildetails->rate;
+                         }
+                    }
+                    elseif($utildetails->billcycle =='Maintenance'){
+                        if ($maintenance == null) {
+                            return redirect('/invoices')->with('statuserror','Monthly '. $request->utilcateg. ' invoices for all houses already generated for the month');
+                         } 
+                         else{ 
+                                $amountdue = $row->totalamount;
                          }
                     }
                     elseif($utildetails->billcycle =='Units'){
@@ -313,30 +342,42 @@ class InvoiceController extends Controller
                                     ->where('invoicetype',$invoicetype)
                                     ->where('invoicedate', '<',$invoicedate)
                                     ->first();
+
         $previousbalancepaid = payments::selectRaw('SUM(amountpaid) as totalpaid')
                                     ->where('lease_id',$lease_id)
                                     ->where('paymentitem',$invoicetype)
                                     ->where('invoicedate', '<',$invoicedate)
                                     ->first();
+
+        $putil = Invoice::select('parent_utility')
+                        ->where('lease_id',$lease_id)
+                        ->where('invoicetype',$invoicetype)
+                        ->where('invoicedate', '<',$invoicedate)
+                        ->get();
+
+        foreach($putil as $parentU){
+        $previousbalputil = collect($parentU->parent_utility);
+        }
         
-        $previousmonthsbalance = $previousbalancedue->totaldue - $previousbalancepaid->totalpaid;
+        $previousmonthsbalance = ($previousbalancedue->totaldue + $previousbalputil->sum('amount'))- $previousbalancepaid->totalpaid;
 
         $readings = Readings::whereMonth('fromdate', '=',Carbon::parse($invoicedate)->month)
                             ->whereYear('fromdate', '=',Carbon::parse($invoicedate)->year)
                             ->where('lease_id',$lease_id)
                             ->first();
-        $parentutility = Utilitycategories::join('utilitycategory as UT2','utilitycategory.id','=','UT2.parent_utility')
-                        ->join('readings','utilitycategory.id','=','readings.utilitycategory_id') 
-                        ->where('utilitycategory.name',$invoicetype)
-                        ->whereMonth('readings.fromdate', '=',Carbon::parse($invoicedate)->month)
-                            ->whereYear('readings.fromdate', '=',Carbon::parse($invoicedate)->year)
-                            ->where('readings.lease_id',$lease_id)
-                        ->select('UT2.name','UT2.rate','readings.amountdue','UT2.billcycle')
-                        ->get();
 
+        $paymenttype = Paymenttypes::where('bank','Safaricom')->first();
+        
+        $parentutilsum = collect($invoice->parent_utility);
+            
+        $total = ($invoice->amountdue + $previousmonthsbalance + $parentutilsum->sum('amount')) - $invoice->payments->sum('amountpaid');
+	$sentemail = SentEmail::where('item_id',$id)->first();
+        
+        
+       
 
                
-        return view('invoice.invoicedetails',compact('invoice','previousmonthsbalance','readings','parentutility'));
+        return view('invoice.invoicedetails',compact('invoice','previousmonthsbalance','readings','parentutilsum','total','paymenttype','sentemail'));
     }
 
  

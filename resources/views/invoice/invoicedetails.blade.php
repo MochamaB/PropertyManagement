@@ -55,7 +55,7 @@
                                         <ul class="px-0 list-unstyled">
                                           <li style="color:red; font-weight:700;font-size:14px">Total Due</li>
                                   
-                                          <li style="color:red; font-weight:700;"class="lead text-bold-800">KSH {{($invoice->amountdue + $previousmonthsbalance) - $invoice->payments->sum('amountpaid') }} </li>
+                                          <li style="color:red; font-weight:700;"class="lead text-bold-800">KSH {{$total}} </li>
                                          
                                         </ul>
                                 </div>
@@ -115,7 +115,7 @@
                                         <th class="text-right">Amount Due  </th>
                                         <th class="text-right">Previous Balance</th>
                                         <th class="text-right">Total Paid</th>
-                                        <th class="text-right">Total Due</th>
+                                        <th class="text-right">Sub-total Due</th>
                                       </tr>
                                     </thead>
                                     <tbody>                            
@@ -135,7 +135,7 @@
                                         <td class="text-right align-top">KSH:{{$previousmonthsbalance}} </td>
                                         
                                         <td class="text-right align-top">KSH: {{$invoice->payments->sum('amountpaid')}}   </td>
-                                        <td class="text-right align-top">KSH: {{($invoice->amountdue + $previousmonthsbalance) - $invoice->payments->sum('amountpaid') }}  </td>
+                                        <td class="text-right align-top">KSH: {{($invoice->amountdue + $previousmonthsbalance) - $invoice->payments->sum('amountpaid')}}  </td>
 
                                       </tr>
                                  
@@ -163,10 +163,10 @@
                                                     <p>1. Go to the M-PESA Menu </p>
                                                       <p>2. Go to Lipa Na Mpesa </p>
                                                       <p>3. Select Paybill </p>
-                                                      <p>4. Enter the business no. <span style="color:blue; font-weight:700;"></span></p>
-                                                      <p>5. Enter the Account no. Which is the Invoice Number <span style="color:blue; font-weight:700;">----- </span></p>
+                                                      <p>4. Enter the business no. <span style="color:blue; font-weight:700;">{{$paymenttype->accountnumber}}</span></p>
+                                                      <p>5. Enter the Account no. Which is the Invoice Number <span style="color:blue; font-weight:700;">{{$invoice->invoiceno}} </span></p>
                                                      
-                                                                    <p>6. Enter Total amount due. <span style="color:blue; font-weight:700;">KSH -------- </span><p>
+                                                                    <p>6. Enter Total amount due. <span style="color:blue; font-weight:700;">KSH {{$total}} </span><p>
                                                                     
                                                       <p>7. Complete Transaction</p>
                                                                   
@@ -174,7 +174,7 @@
                                 </div>
                
                                 <div class="col">
-                                        <p class="lead">Total due</p>
+                                       
                                         <table class="table">
                                           <tbody>
                                             <tr>
@@ -187,7 +187,7 @@
                                             </tr>
                                             <tr>
                                               <td>Other Charges</td>
-                                              <td class="text-right">KSH: ------ </td>
+                                              <td class="text-right">KSH: {{$parentutilsum->sum('amount')}} </td>
                                             </tr>
                                             
                                             <tr>
@@ -198,7 +198,7 @@
                                             <tr>
                                               <td class="text-bold-800" style="font-size:18px;font-weight:700">Total Due</td>
                                               
-                                              <td class="text-bold-800 text-right" style="font-size:18px;font-weight:700">KSH: --------- </td>
+                                              <td class="text-bold-800 text-right" style="font-size:18px;font-weight:700">KSH: {{$total}} </td>
                                            
                                             </tr> 
                                          
@@ -211,7 +211,7 @@
                             <div class="row">
                                 <div class="col"></br></br>
                                     <h6>Terms & Condition</h6>
-                                    <p>Test pilot isn't always the healthiest business.</p>
+                                    <p>Refer to the terms and conditions on Lease agreement.</p>
                                 </div>
                                 <div class="col">
                                         <p class="mb-0 mt-1">Authorized person</p>
@@ -234,26 +234,26 @@
                                         </button>
                                       </div>
                                       <div class="modal-body">
-                                      <form action="" method="GET" id="form" name="form">
+                                      <form action="{{ url('send-InvoiceEmail/'.$invoice->id. '/' . $invoice->lease_id. '/' . $invoice->invoicedate. '/' . $invoice->invoicetype) }}" method="GET" id="form" name="form">
                                             @csrf
                                             
                                             <div class="form-group col-md-6 mb-3">
-                                            <input type="hidden" class="form-control" name="lease_id" value="---" readonly>
-                                            <input type="hidden" class="form-control" name="item_id" value="-----" readonly>
+                                            <input type="hidden" class="form-control" name="lease_id" value="{{$invoice->lease_id}}" readonly>
+                                            <input type="hidden" class="form-control" name="item_id" value="{{$invoice->id}}" readonly>
                                                 <label for="">Invoice No <span style="color:red;font-size:20px">*</span></label>
-                                                <input type="text" class="form-control" name="itemno" value="" readonly>
+                                                <input type="text" class="form-control" name="itemno" value="{{$invoice->invoiceno}}" readonly>
                                             </div>
                                             <div class="form-group col-md-6 mb-3">
                                                 <label for="">Mail to  <span style="color:red;font-size:20px">*</span></label>
-                                                <input type="text" class="form-control" name="mailto" value="" >
+                                                <input type="text" class="form-control" name="mailto" value="{{$invoice->tenants->email}}" >
                                             </div>
                                             <div class="form-group col-md-6 mb-3">
                                                 <label for="">House Number <span style="color:red;font-size:20px">*</span></label>
-                                                <input type="text" class="form-control" name="housenumber" value="" readonly>
+                                                <input type="text" class="form-control" name="housenumber" value="{{$invoice->houses->housenumber}}" readonly>
                                             </div>
                                             <div class="form-group col-md-6 mb-3">
                                                 <label for="">Recepient Name <span style="color:red;font-size:20px">*</span></label>
-                                                <input type="text" class="form-control" name="recepientname" value="" >
+                                                <input type="text" class="form-control" name="recepientname" value="{{$invoice->tenants->firstname}} {{$invoice->tenants->lastname}}" >
                                             </div>
                                     
                                       </div>

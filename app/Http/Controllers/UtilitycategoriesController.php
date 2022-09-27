@@ -16,7 +16,8 @@ class UtilitycategoriesController extends Controller
      */
     public function index()
     {
-        $utilitycategories = utilitycategories::all();
+        $utilitycategories = utilitycategories::with('parent')
+        ->get();
         return view('utilitycategories.index', compact('utilitycategories'));
     }
     

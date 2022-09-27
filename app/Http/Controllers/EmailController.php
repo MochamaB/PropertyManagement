@@ -21,39 +21,39 @@ use App\Models\Readings;
 use App\Models\paymenttypes;
 use App\Models\Repairwork;
 use PDF;
+use Carbon\Carbon;
 
 class EmailController extends Controller
 {
     public function invoiceEmail(Request $request,$id,$lease_id,$invoicedate,$invoicetype){
-        $invoicedetails= invoice::join('lease','lease.id','=','invoices.lease_id')
-        ->join('houses','houses.id','=','lease.house_id')
-        ->join('tenants','tenants.id','=','lease.tenant_id')
-        ->select('invoices.invoiceno','houses.housenumber','tenants.firstname','tenants.lastname','tenants.idnumber',
-                'tenants.email','tenants.phonenumber','invoices.invoicedate','Invoices.duedate','Invoices.status','invoices.amountdue','invoices.invoicetype')
-                ->with('payments')
-                ->where('invoices.id',$id)
-                ->first();
-        $previousbalancedue = invoice::selectRaw('SUM(amountdue) as totaldue')
-        ->where('lease_id',$lease_id)
-        ->where('invoicetype',$invoicetype)
-        ->where('invoicedate', '<',$invoicedate)
-        ->first(); 
 
+        $invoice = Invoice::with(['houses','leases','apartments','payments','utilitycategories']) 
+        ->find($id);
+
+        $previousbalancedue = invoice::selectRaw('SUM(amountdue) as totaldue')
+                        ->where('lease_id',$lease_id)
+                        ->where('invoicetype',$invoicetype)
+                        ->where('invoicedate', '<',$invoicedate)
+                        ->first();
         $previousbalancepaid = payments::selectRaw('SUM(amountpaid) as totalpaid')
-        ->where('lease_id',$lease_id)
-        ->where('paymentitem',$invoicetype)
-        ->where('invoicedate', '<',$invoicedate)
-        ->first();
-        $paymenttypes = paymenttypes::all();
-        
-        $paymentsinfo = invoice::with('payments')->find($id);
+                        ->where('lease_id',$lease_id)
+                        ->where('paymentitem',$invoicetype)
+                        ->where('invoicedate', '<',$invoicedate)
+                        ->first();
 
         $previousmonthsbalance = $previousbalancedue->totaldue - $previousbalancepaid->totalpaid;
-        $utilitycat = Utilitycategories:: where('name',$invoicetype)->first();
-        $readings = readings::where('fromdate','=',$invoicedate)
-        ->where('lease_id',$lease_id)
-        ->first();
-        $watercharge = Utilitycategories:: where('name','Water Monthly Standing Charge')->first();
+
+        $readings = Readings::whereMonth('fromdate', '=',Carbon::parse($invoicedate)->month)
+                ->whereYear('fromdate', '=',Carbon::parse($invoicedate)->year)
+                ->where('lease_id',$lease_id)
+                ->first();
+
+        $paymenttype = Paymenttypes::where('bank','Safaricom')->first();
+
+        $parentutilsum = collect($invoice->parent_utility);
+
+        $total = ($invoice->amountdue + $previousmonthsbalance + $parentutilsum->sum('amount')) - $invoice->payments->sum('amountpaid');
+
 
         $to = $request->input('mailto');
         $from = $request->input('mailfrom');
@@ -61,7 +61,7 @@ class EmailController extends Controller
 
 /////////////////////   send Email/////////////////////////////////
       
-        Mail::to($to)->send(New invoiceMail($invoicedetails,$previousmonthsbalance,$paymenttypes,$utilitycat,$readings,$watercharge,$paymentsinfo));
+        Mail::to($to)->send(New invoiceMail($invoice,$previousmonthsbalance,$readings,$parentutilsum,$total,$paymenttype));
 
         ///// update sent email table //////////////////////////
         $sentemail = SentEmail::updateOrCreate(
@@ -72,14 +72,14 @@ class EmailController extends Controller
                         'lease_id'  => $request->input('lease_id'),
                         'item_id'  => $request->input('item_id'),
                         'itemno'  => $request->input('itemno'),
-                        'mailto' => $request->input('mailto'),
+                        'mailto' => $invoice->apartments->email,
                         'mailfrom' => Auth::user()->email,
                         'recepientname' => $request->input('recepientname')
                  ]
            
                  );
   
-        return View('emails.invoiceEmailView',compact('invoicedetails','previousmonthsbalance','paymenttypes','utilitycat','readings','watercharge','paymentsinfo'));
+        return View('emails.invoiceEmailView',compact('invoice','previousmonthsbalance','readings','parentutilsum','total','paymenttype'));
 
     }
 

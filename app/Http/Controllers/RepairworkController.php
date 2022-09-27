@@ -59,8 +59,8 @@ class RepairworkController extends Controller
                                   ->join('tenants','tenants.id','=','lease.tenant_id')
                                   ->join('repairwork','repairwork.maintenance_id','=','maintenance.id')
                                   ->select('tenants.firstname','tenants.lastname','tenants.email','houses.housenumber',
-                                            'maintenance.name','repairwork.assignedto','maintenance.created_at','maintenance.priority','maintenance.maintenanceno',
-                                            'maintenance.id','repairwork.Workid','repairwork.status','repairwork.amountpaid','repairwork.amountpaid','repairwork.dateofrepair','repairwork.updated_at')
+                                            'maintenance.title','repairwork.assignedto','maintenance.created_at','maintenance.priority','maintenance.maintenanceno',
+                                            'maintenance.id','repairwork.Workid','repairwork.status','repairwork.amountpaid','repairwork.amountspent','repairwork.dateofrepair','repairwork.updated_at')
                                             ->whereYear('maintenance.created_at', '=', Carbon::parse($year)->year)
                                             ->whereMonth('maintenance.created_at', '=', Carbon::parse($month)->month)
                                             ->get();
@@ -131,10 +131,11 @@ class RepairworkController extends Controller
         ->join('houses', 'houses.id', '=', 'lease.house_id')
         ->join('tenants','tenants.id','=','lease.tenant_id')
         ->join('repairwork','repairwork.maintenance_id','=','maintenance.id')
+        ->join('apartment','apartment.id','=','lease.apartment_id')
         ->select('tenants.firstname','tenants.lastname','tenants.email','houses.housenumber','tenants.idnumber','tenants.phonenumber',
-                  'maintenance.name','repairwork.assignedto','maintenance.created_at','maintenance.priority','maintenance.description',
-                  'maintenance.id','maintenance.lease_id','repairwork.Workid','repairwork.maintenance_id','repairwork.status','repairwork.amountpaid','repairwork.amountpaid',
-                  'repairwork.dateofrepair','repairwork.assignedto')
+                  'maintenance.title','repairwork.assignedto','maintenance.created_at','maintenance.priority','maintenance.description',
+                  'maintenance.id','maintenance.lease_id','repairwork.*','repairwork.maintenance_id','repairwork.status','repairwork.amountspent','repairwork.amountpaid',
+                  'repairwork.dateofrepair','repairwork.assignedto','apartment.name','apartment.logo','apartment.postalcode','apartment.location','apartment.email')
                   ->where('maintenance.id', '=',$id)
                   ->first();
 

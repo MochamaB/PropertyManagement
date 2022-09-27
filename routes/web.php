@@ -106,6 +106,9 @@ Route::get('add-invoice', [InvoiceController::class, 'create'])->name('Invoices.
 Route::get('invoices', [InvoiceController::class, 'index'])->name('Invoices.view');
 Route::get('invoice/{year}/{invoicetype}', [InvoiceController::class, 'indexmonth'])->name('Invoices.view_month');
 Route::get('invoices/ListInvoices/{year}/{month}/{invoicetype}', [InvoiceController::class, 'ListInvoices'])->name('Invoices.view_list');
+
+Route::post('generateinvoice', [InvoiceController::class, 'GenerateInvoice'])->name('Invoices.generate');
+
            /* From Lease */
 Route::post('Fromlease-invoice', [InvoiceController::class, 'fromleaseInvoice'])->name('Invoices.generaterent');
 
@@ -142,7 +145,7 @@ Route::put('delete-paymenttype/{id}', [PaymenttypesController::class, 'destroy']
 /*     Payments Routes    */
 Route::get('add-payment/{id}/{lease_id}/{invoicedate}/{invoicetype}', [PaymentsController::class, 'create'])->name('Payments.create');
 Route::post('add-payment', [PaymentsController::class, 'store'])->name('Payments.store');
-Route::get('payments', [PaymentsController::class, 'index'])->name('payments.view');
+Route::get('payments', [PaymentsController::class, 'index'])->name('Payments.view');
 Route::get('edit-payment/{id}', [PaymentsController::class, 'edit'])->name('Payments.edit');
 Route::put('update-payment/{id}', [PaymentsController::class, 'update'])->name('Payments.update');
 Route::get('details-receipt/{id}/{lease_id}/{invoicedate}/{invoicetype}', [PaymentsController::class, 'details'])->name('Payments.details');
@@ -209,8 +212,6 @@ Route::get('show-workorder/{id}', [RepairworkController::class, 'show'])->name('
 Route::get('edit-workorder/{id}', [RepairworkController::class, 'edit'])->name('Repairwork.edit');
 Route::put('update-workorder/{id}', [RepairworkController::class, 'update'])->name('Repairwork.edit');
 Route::get('delete-workorder/{id}', [RepairworkController::class, 'destroy'])->name('Repairwork.destroy');
-        
-});
 
 /*     Apartment Routes    */
 
@@ -222,7 +223,14 @@ Route::put('update-apartments/{id}', [ApartmentController::class, 'update'])->na
 
 Route::get('delete-apartments/{id}', [ApartmentController::class, 'destroy'])->name('Apartments.destroy');
 
-Route::post('generateinvoice', [InvoiceController::class, 'GenerateInvoice'])->name('Invoices.generate.');
+        
+});
+
+
+
+
+
+
 
 /////////////  Error Routes /////////////////
 Route::fallback(function(){

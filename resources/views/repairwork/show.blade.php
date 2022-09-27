@@ -37,22 +37,24 @@
                     <div class="card-body" id="printMe">
                      <!-- Invoice Company Details -->
                             <div class="row">
-                                    <div class="col-3"><a class="navbar-brand">
-                                        <img src="{{ asset('Templateassets/img/logo2edit.png') }}" alt="" style="width:220px; height:170px;margin-left:-20px;opacity:1.5;"></a>
+                            <div class="col-3"><a class="navbar-brand">
+                                        <img src="{{ asset('uploads/Images/'.$workorder->logo) }}" alt="" style="width:220px; height:170px;margin-left:-20px;opacity:1.5;"></a>
                                         </div>
                                     <div class="col-3">
                                         <ul class="ml-2 px-0 list-unstyled">
-                                            <li class="text-bold-800">MJ Hinga Properties</li>
-                                            <li>Adress details,</li>
-                                            <li>Nairobi,</li>
-                                            <li>KENYA</li>
+                                            <li class="text-bold-800">{{$workorder->name}}</li>
+                                            <li>{{$workorder->postalcode}},</li>
+                                            <li>{{$workorder->location}},</li>
+                                            <li>{{$workorder->email}}</li>
                                           </ul>
                                     </div>
                                 <div class="col " style="text-align: right;">
                                     <h2 style="text-transform: uppercase;">JOB WORK ORDER</h2>
                                         <p class="pb-sm-3" style="color:blue; font-weight:700;font-size:14px">#:{{$workorder->Workid}} </p>
                                         <ul class="px-0 list-unstyled">
-                                          <li style="color:red; font-weight:700;font-size:14px">Total USED</li>
+                                          <li style="color:red; font-weight:700;font-size:14px">Total Used</li>
+                                          <li style="color:red; font-weight:700;font-size:14px">Supplies: KSH {{$workorder->amountspent}} </li>
+                                          <li style="color:red; font-weight:700;font-size:14px">Labour Cost: KSH {{$workorder->amountpaid}}</li>
                                           <li style="color:red; font-weight:700;"class="lead text-bold-800">KSH {{$workorder->amountspent + $workorder->amountpaid}}</li>
                                          
                                         </ul>
@@ -95,7 +97,7 @@
                                    </div>
                                 <!-- Invoice Customer Details -->
 
-                            </div><br/>
+                            </div>
                             <div class="col-md-7 " style="text-align:middle;">
                                         <p style="color:blue; font-weight:700;font-size:16px;"><b>TITLE: {{$workorder->name}}</b></p>
                                         <p style="font-weight:700;font-size:16px;"><b>1. Short Description of Problem </b></p>
@@ -114,11 +116,12 @@
                             
                             
                             <div class="row">
-                                <div class="col">
+                                <div class="col"><br/><br/>
                                     <h6>Terms & Condition</h6>
                                     <p>Test pilot isn't always the healthiest business.</p>
                                 </div>
                                 <div class="col">
+                                <p class="mb-0 mt-1"><h4><b>Assigned To: </b>{{$workorder->assignedto}}</h4> </p>
                                         <p class="mb-0 mt-1">Authorized person</p>
                                     <img src="{{ asset('Templateassets/img/signature.png') }}" alt="signature" class="height-100" />
                                     <h6>MJ HINGA</h6>

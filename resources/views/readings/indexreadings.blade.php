@@ -26,6 +26,7 @@
                                 <th></th>
                                 <th>Tenant</th>
                                 <th>House No:</th>
+                                <th>Utility</th>
                                 <th>Last Reading</th>
                                 <th>Current Reading</th>
                                 <th>Units Used</th>
@@ -41,11 +42,12 @@
                                 <td>{{ $key+1 }}</td>
                                 <td>{{$item->firstname}} {{$item->lastname}}</td>
                                 <td>{{$item->housenumber}}</td>
+                                <td>{{$item->name}}</td>
                                 <td>{{$item->lastreading}}</td>
                                 <td>{{$item->currentreading}}</td>
                                 <td>{{$item->currentreading - $item->lastreading}}</td>
                                 <td>{{$item->amountdue}}</td>
-                                <td>{{$item->fromdate}}</td>
+                                <td>{{\Carbon\Carbon::parse($item->fromdate)->format('Y M d')}}</td>
                                 
                                 <td>
                                     <a href="" class="btn btn-primary btn-sm">Edit</a>

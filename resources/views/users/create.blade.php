@@ -52,7 +52,7 @@
                 </div>
                 <div class="form-group mb-3">
                     <label for="email">Email</label>
-                    <input value="" type="email" class="form-control" name="email" placeholder="Email address" required>
+                    <input value="" type="email" value="{{ old('email') }}" class="form-control" name="email" placeholder="Email address" required>
                     @if ($errors->has('email'))
                         <span class="text-danger text-left">{{ $errors->first('email') }}</span>
                     @endif
@@ -61,7 +61,7 @@
                 @if( Auth::user()->can('Apartments.create'))
                 <div class="form-group mb-3">
                     <label for="apartment">Apartment</label>
-                    <select class="form-control" name="apartment_id" required>
+                    <select class="formcontrol2" name="apartment_id" required>
                         <option value="">Select Apartment</option>
                         @foreach($apartment as $item)
                         <option value="{{$item->id}}">{{$item->name}}</option>

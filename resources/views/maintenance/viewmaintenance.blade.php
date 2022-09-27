@@ -21,23 +21,7 @@
 
 <!---------  breadcrumbs ---------------->
 
-                @if (session('status'))
-				<div class="alert alert-success alert-dismissible fade show" role="alert">
-                      <strong>Sucess! </strong> {{ session('status') }}.  
-                        <button type="button" class="btn-success float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-				@endif
-				
-				@if (session('statuserror'))
-				<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                      <strong>Error! </strong> {{ session('statuserror') }}.  <a href="{{ url('leases/') }}" class="alert-link">Go to Leases</a>
-                        <button type="button" class="btn-success float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-				@endif
+@include('layouts.partials.messages')	
             
                
                 <br />
@@ -80,7 +64,7 @@
                                 <th data-sortable="true">Type</th>
                                 <th data-sortable="true">Raised On</th>
                                 <th data-sortable="true">Assigned To</th>
-                                <th data-sortable="true">Description</th>
+                                <th data-sortable="true">Title</th>
                                 <th data-sortable="true">Work ID</th>
                                 <th data-sortable="true">Total Cost</th>
                                 <th data-sortable="true">Status</th>
@@ -115,7 +99,7 @@
                                 <td>{{$item->assignedto}}</td>
                                 @endif
 
-                                <td>{{$item->name}}</td>
+                                <td>{{$item->title}}</td>
 
                                 @if($item->Workid == null)
                                 <td><div  class="badge badge-opacity-warning">NOT STARTED </div></td>

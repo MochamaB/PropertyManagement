@@ -21,23 +21,7 @@
 
 <!---------  breadcrumbs ---------------->
 
-                @if (session('status'))
-				<div class="alert alert-success alert-dismissible fade show" role="alert">
-                      <strong>Sucess! </strong> {{ session('status') }}.  
-                        <button type="button" class="btn-success float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-				@endif
-				
-				@if (session('statuserror'))
-				<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                      <strong>Error! </strong> {{ session('statuserror') }}.  <a href="{{ url('leases/') }}" class="alert-link">Go to Leases</a>
-                        <button type="button" class="btn-success float-end" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                </div>
-				@endif
+@include('layouts.partials.messages')	
             
                
                 <br />
@@ -107,7 +91,7 @@
                                         </div>
                                 </td>
                                 <td>{{$item->Workid}}</td>
-                                <td>{{$item->name}}</td>
+                                <td>{{$item->title}}</td>
                                 <td>{{\Carbon\Carbon::parse($item->dateofrepair)->format('d M Y') }}</td>
                                 
                                 <td>{{$item->amountspent}}</td>

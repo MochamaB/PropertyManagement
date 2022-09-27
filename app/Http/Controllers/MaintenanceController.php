@@ -51,8 +51,8 @@ class MaintenanceController extends Controller
                                   ->join('tenants','tenants.id','=','lease.tenant_id')
                                   ->leftjoin('repairwork','repairwork.maintenance_id','=','maintenance.id')
                                   ->select('tenants.firstname','tenants.lastname','tenants.email','houses.housenumber',
-                                            'maintenance.billtype','maintenance.raisedby','maintenance.created_at','maintenance.priority','maintenance.maintenanceno','maintenance.name',
-                                            'maintenance.id','repairwork.Workid','repairwork.status','repairwork.amountpaid','repairwork.amountpaid')
+                                            'maintenance.billtype','maintenance.raisedby','maintenance.created_at','maintenance.priority','maintenance.maintenanceno','maintenance.title',
+                                            'maintenance.id','repairwork.Workid','repairwork.status','repairwork.amountpaid','repairwork.amountspent')
                                             ->whereYear('maintenance.created_at', '=', Carbon::parse($year)->year)
                                             ->whereMonth('maintenance.created_at', '=', Carbon::parse($month)->month)
                                             ->get();
@@ -98,7 +98,7 @@ class MaintenanceController extends Controller
             'lease_id' => 'required',
             'priority' => 'required',
             'billtype' => 'required',
-            'name' => 'required',
+            'title' => 'required',
             'description' => 'required',
             
             
@@ -106,7 +106,7 @@ class MaintenanceController extends Controller
             'lease_id.required' => 'This field is required',
             'priority.required' => 'This field is required',
             'billtype.required' => 'This field is required',
-            'name.required' => 'This field is required',
+            'title.required' => 'This field is required',
             'description.required' => 'This field is required',
     
         ]);
@@ -115,7 +115,7 @@ class MaintenanceController extends Controller
         $maintenance->maintenanceno ='REPAIR'.$createddate.$house->housenumber;
         $maintenance->priority = $request->input('priority');  
         $maintenance->billtype = $request->input('billtype');  
-        $maintenance->name = $request->input('name');
+        $maintenance->title = $request->input('title');
         $maintenance->description = $request->input('description');;
         $maintenance->raisedby = Auth::user()->name;
         $maintenance->save();

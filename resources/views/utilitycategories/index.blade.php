@@ -18,26 +18,53 @@
     <div class="row">
         <div class="col-md-12">
                     @include('layouts.partials.messages')
-            <div class="card">
+            
                                                                    
-                <div class="card-header">
+              
                      <div style="align-items:end">
                         <br />
                        <button class="btn btn-primary btn-lg text-white mb-0 me-0" style="float:right" type="button" onclick="window.location='{{ url("/add-utilitycategories") }}'">
                          <i class="mdi mdi-account-plus"></i>Add new Utility</button>
                        </div><br />
                     <h4>List of Utility Types</h4>
-                </div>
-                <div class="card-body">
-
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
+                
+                
+                <div class=" table-responsive"> 
+                <table id="table"
+                                   
+                                   data-toggle="table"
+                                   data-icon-size="sm"
+                                   data-toolbar-align="right"
+                                   data-buttons-align="left"
+                                   data-search-align="left"
+                                   data-maintain-selected="true"
+                                   data-sort-name="First Name"
+                                   data-sort-order="asc"
+                                   data-search="true"
+                                   data-show-pagination-switch="true"
+                                   data-sticky-header="true"
+                                   data-pagination="true"
+                                   data-page-list="[100, 200, 250, 500, ALL]"
+                                   data-page-size="100"
+                                   data-show-footer="false"
+                                   data-side-pagination="client"
+								   
+								    data-show-export="true"
+                                        data-buttons-class="primary"
+								   
+								   
+								   data-buttons-class="primary"
+                                   
+                                   class="table table-hover table-striped"
+                                   style="font-size:12px">
+                                <thead style="" class="sticky-header">
+                                    <tr class="tableheading">
                                 <th>ID</th>
-                                <th>Type</th>
-                                <th>Bill Cycle:</th>
+                                <th data-sortable="true">Type</th>
+                                <th data-sortable="true">Bill Cycle:</th>
                                 <th>Rate</th>
-                                <th>Invoicable</th>
+                                <th data-sortable="true">Invoicable</th>
+                                <th data-sortable="true">Parent Utiity</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -56,6 +83,12 @@
                                 <td>Yes</td>
                                 @else<td>No</td>
                                 @endif
+                
+                               @if($item->parent != null)
+                                <td>{{$item->parent['name']}}</td>
+                                @else
+                                <td>None</td>
+                                @endif
                                 <td>
                                 @if( $item->billcycle == 'Units') 
                                 <a href="{{ url('add-reading/') }}" class="btn btn-dark btn-sm">Readings</a>
@@ -67,9 +100,8 @@
                             @endforeach
                         </tbody>
                     </table>
-
                 </div>
-            </div>
+           
         </div>
     </div>
 </div>

@@ -117,9 +117,9 @@
                                                               </div>
                                                      </td>
                                                      <td>{{\Carbon\Carbon::parse($item->invoicedate)->format('d M Y') }}</td> <!------Invoice Date -->
-                                                     <td>{{\Carbon\Carbon::parse($item->duedate)->format('d M Y') }}</td> <!------Due Date -->
+                                                     <td>{{\Carbon\Carbon::parse($item->duedate)->format('d M Y') }} </td> <!------Due Date -->
                                                      <td><h6 style="color:blue">{{$item->invoicetype}}<h6>
-                                                        <p><span style="font-size:14px;font-weight:700">KSH:{{ $item->amountdue }}</span></p> <!------Amount Due -->
+                                                        <p><span style="font-size:14px;font-weight:700">KSH:{{ $item->amountdue + $parentutilsum->sum('amount') }}</span></p> <!------Amount Due -->
                                       
                             
                                                      </td>
@@ -131,11 +131,11 @@
                                                         @endif
                                                        
                                                      <!------Previous Balance -->
-                                                     <td>KSH: {{ $item->amountdue - $item->payments->sum('amountpaid')  }}</td> <!------Balance -->
+                                                     <td>KSH: {{ ($item->amountdue + $parentutilsum->sum('amount')) - $item->payments->sum('amountpaid')  }}</td> <!------Balance -->
                                                      
-                                                     @if( $item->amountdue -$item->payments->sum('amountpaid') == 0 )
+                                                     @if( ($item->amountdue + $parentutilsum->sum('amount')) -$item->payments->sum('amountpaid') == 0 )
                                                      <td><div style="background-color:green" class="badge badge-opacity-warning"> PAID</div></td> <!------Status -->
-                                                     @elseif( $item->amountdue - $item->payments->sum('amountpaid') < 0  )
+                                                     @elseif( ($item->amountdue + $parentutilsum->sum('amount')) - $item->payments->sum('amountpaid') < 0  )
                                                      <td><div style="background-color:darkorange" class="badge badge-opacity-warning"> OVER PAID</div></td>
                                                      
                                                      @elseif ( $item->payments->count()  != null)
@@ -146,7 +146,7 @@
                                                      @endif
                                                      <td>
                                                                 <a href="{{ url('details-invoice/'.$item->id. '/' . $item->lease_id. '/' . $item->invoicedate. '/' . $item->invoicetype) }}" class="btn btn-success btn-sm"><i class="mdi mdi-clipboard-text"></i>Invoice</a>
-                                                            @if( $item->amountdue - $item->payments->sum('amountpaid') == 0)
+                                                            @if( ($item->amountdue + $parentutilsum->sum('amount')) - $item->payments->sum('amountpaid') == 0)
                                                                 <a style="background-color:green" class="btn btn-warning btn-sm"><i class="mdi mdi-cash-usd"></i></i>PAID</a>
                                                             @else
                                                             <a href="{{ url('add-payment/'.$item->id. '/' . $item->lease_id. '/' . $item->invoicedate. '/' . $item->invoicetype) }}" class="btn btn-warning btn-sm"><i class="mdi mdi-cash-usd"></i></i>Pay</a>
@@ -154,7 +154,7 @@
                                                             @if($item->payments->count()  == null )
                                                                 <a class="btn btn-dark btn-sm"><i class="mdi mdi-cash-usd"> </i> No Receipt Available<i class=""> ({{$item->payments->count()}})</i></a>
                                                             @else
-                                                            <a href="{{ url('details-receipt/'.$item->id) }}" class="btn btn-dark btn-sm"><i class="mdi mdi-cash-usd"></i></i>Receipt<i class="mdi mdi-cash-usd"> {{$item->payments->count()}}</i></a>
+                                                            <a href="{{ url('details-receipt/'.$item->id. '/' . $item->lease_id. '/' . $item->invoicedate. '/' . $item->invoicetype) }}" class="btn btn-dark btn-sm"><i class="mdi mdi-cash-usd"></i></i>Receipt<i class="mdi mdi-cash-usd"> {{$item->payments->count()}}</i></a>
                                                             @endif
                                                             <a href="{{ url('edit-invoice/'.$item->id) }}" class="btn btn-primary btn-sm"><i class="mdi mdi-lead-pencil"></i></a>
                                 

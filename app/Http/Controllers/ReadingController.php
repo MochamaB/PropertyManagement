@@ -46,6 +46,7 @@ class ReadingController extends Controller
     public function create()
     {
         $utilitycategories = utilitycategories::where('billcycle','Units')
+                                              ->where('parent_utility',0)
                                         ->get(['id','name']);
 
         $house = lease::join('houses', 'houses.id', '=', 'lease.house_id')
@@ -115,7 +116,7 @@ class ReadingController extends Controller
                             ->join('tenants','tenants.id','=','Lease.tenant_id')
                             ->select('houses.housenumber','tenants.firstname','tenants.lastname',
                                      'readings.lastreading','readings.currentreading','readings.fromdate',
-                                     readings::raw('(readings.currentreading - readings.lastreading) * utilitycategory.rate as amountdue'))
+                                     'readings.amountdue','utilitycategory.name')
                             ->whereYear('readings.fromdate', '=', Carbon::parse($year)->year)
                              ->whereMonth('readings.fromdate', '=', Carbon::parse($month)->month)
                             ->get();
