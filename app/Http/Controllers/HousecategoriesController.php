@@ -79,6 +79,7 @@ class HousecategoriesController extends Controller
                 $housecategories->description = $request->input('description');
                 $housecategories->apartment_id = $request->input('apartment_id');
                 $housecategories->save();
+                
                 return redirect('housecategories')->with('status','House Category Added Successfully');
             }
     }

@@ -384,3 +384,19 @@ label {
     font-weight: 600;
     
 }
+
+.sidebar .nav .nav-item.active {
+    border-radius: 0px 0px 0px 0px;
+    border-top: 1px solid #0576f8;
+    border-bottom: 1px solid #0576f8;
+  }
+  
+  .sidebar .nav .nav-item.active > .nav-link {
+    background: #fff;
+    position: relative;
+    font-weight: bold;
+    font-size: 13px;
+    border-radius: 0px 0px;
+    
+
+  }

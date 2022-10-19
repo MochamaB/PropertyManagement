@@ -132,7 +132,7 @@ class RepairworkController extends Controller
         ->join('tenants','tenants.id','=','lease.tenant_id')
         ->join('repairwork','repairwork.maintenance_id','=','maintenance.id')
         ->join('apartment','apartment.id','=','lease.apartment_id')
-        ->select('tenants.firstname','tenants.lastname','tenants.email','houses.housenumber','tenants.idnumber','tenants.phonenumber',
+        ->select('tenants.firstname','tenants.lastname','tenants.email as temail','houses.housenumber','tenants.idnumber','tenants.phonenumber',
                   'maintenance.title','repairwork.assignedto','maintenance.created_at','maintenance.priority','maintenance.description',
                   'maintenance.id','maintenance.lease_id','repairwork.*','repairwork.maintenance_id','repairwork.status','repairwork.amountspent','repairwork.amountpaid',
                   'repairwork.dateofrepair','repairwork.assignedto','apartment.name','apartment.logo','apartment.postalcode','apartment.location','apartment.email')

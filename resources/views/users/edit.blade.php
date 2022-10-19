@@ -56,7 +56,7 @@
                                 </div>
                                 @if( Auth::user()->can('Apartments.create'))
                                     <div class="form-group mb-3">
-                                        <label for="apartment">Apartment</label>
+                                        <label for="apartment" class="form-label">Apartment</label>
                                         <select class="formcontrol2" name="apartment_id" required>
                                             <option value="">Select Apartment</option>
                                             @foreach($apartment as $item)

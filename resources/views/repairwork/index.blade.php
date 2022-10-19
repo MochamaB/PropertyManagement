@@ -71,7 +71,7 @@
                                 
                             </tr>
                         </thead>
-                @if (Route::currentRouteName() == 'YearViewrepairwork')
+                @if (Route::currentRouteName() == 'Repairwork.view_year')
                         <tbody>
                             
                         @foreach($workorderyeargroup as $key => $item)
@@ -87,7 +87,7 @@
                         @endforeach
                         </tbody>
                     @endif
-                    @if (Route::currentRouteName() == 'MonthViewrepairwork')
+                    @if (Route::currentRouteName() == 'Repairwork.view_month')
                         <tbody>
                             
                         @foreach($workordermonthgroup as $key => $item)

@@ -6,7 +6,7 @@
                   <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
 
                   <div class="alert alert-success alert-dismissible fade show" id="welcomemessage" role="alert" style="border-left:5px solid #34B1AA;">
-                     <h3><strong>Welcome To Hinga Properties </strong><h3>  
+                     <h3><strong>Welcome To {{$settings->systemname}} </strong><h3>  
                         <button type="button" class="btn-success float-end" data-dismiss="alert" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>

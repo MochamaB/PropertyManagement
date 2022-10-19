@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Hash;
 
 class TenantsController extends Controller
 {
@@ -45,6 +46,18 @@ class TenantsController extends Controller
         $apartment = Apartment::get();
         $house = house::select('id','status','housenumber')->where('status', 'Empty')->get();
          return view('tenants.create', compact('house','apartment'));
+    }
+    public function createfromuser($id)
+    {
+        $apartment = Apartment::get();
+        $user = User::where('id',$id)->first();
+        //////// Split fullname to firstname and lastname///////////
+        $split = explode(" ", $user->name);
+        $firstname = array_shift($split);
+        $lastname  = implode(" ", $split);
+        //////
+        $house = house::select('id','status','housenumber')->where('status', 'Empty')->get();
+         return view('tenants.createfromuser', compact('house','apartment','user','firstname','lastname'));
     }
 
     /**
@@ -109,6 +122,18 @@ class TenantsController extends Controller
                 $tenants->apartment_id = $request->input('apartment_id');
                 $tenants->save();
 
+                /// save new tenant in the users table
+                $role = Role::where('name', 'Tenant')->first();
+                $usercreate = User::create([
+                    'name' => $request->firstname.' '. $request->lastname,
+                    'email' => $request->email,
+                    'phonenumber' => $request->input('phonenumber'),
+                    'password' => Hash::make('password123'),
+                    'apartment_id' => Auth::user()->apartment_id,
+                ]);
+                $usercreate->assignRole($role);
+                ///////////////////
+
                 $permissions = Permission::where('name','Tenants.destroy')->pluck('name')->toArray();
                 $user = User::get()
                 ->filter(function ($user) use ($permissions) {
@@ -135,8 +160,6 @@ class TenantsController extends Controller
                 $tenants->users()->attach($user2);
                 }
   
-            
-            
             
 
                 return redirect('tenants/')->with('status','Tenant Added Successfully. Attach and remove managers of the tenant');

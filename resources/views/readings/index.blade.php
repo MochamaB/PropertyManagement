@@ -17,12 +17,7 @@
          </div>
     <div class="row">
         <div class="col-md-12">
-            @if (session('status'))
-                <h6 class="alert alert-success alert-dismissible">{{ session('status') }}</h6>
-            @endif
-              @if (session('statuserror'))
-                        <h6 class="alert alert-danger">{{ session('statuserror') }}</h6>
-                     @endif    
+                @include('layouts.partials.messages')	
             <div class="card">
                                                                    
                 <div class="card-header">

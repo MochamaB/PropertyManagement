@@ -31,6 +31,7 @@ class UpdateUserRequest extends FormRequest
             'email' => 'required|unique:users,email,'.$user->id,
             'apartment_id' => 'required',
             
+            
         ];
     }
 }

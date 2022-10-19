@@ -72,10 +72,12 @@ class Lease extends Model
     }
     public function scopeFilterReadings($query,$fromdate)
     {
-       
+       $billcycle = Utilitycategories::get();
+       if($billcycle->billcycycle = 'Units'){
         return $query->leftjoin('readings','readings.lease_id', '=', 'lease.id')
                      ->where('readings.fromdate',$fromdate)
                     ->addSelect('readings.lease_id','readings.amountdue');
+       }
     }
     
 

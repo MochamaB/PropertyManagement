@@ -181,7 +181,7 @@
                          <input type="hidden" name="status" value="No Lease" />
                         </div>
                         </br>
-                    <div class="form-group mb-3" style="float:right">
+                    <div class="form-group mb-3 float-end" style="float:end">
                             <button type="submit" class="btn btn-primary">Save Tenant</button>
                         </div>
                   </form>

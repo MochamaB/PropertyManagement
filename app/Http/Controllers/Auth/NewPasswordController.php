@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
+use App\Models\Systemsettings;
 
 class NewPasswordController extends Controller
 {
@@ -20,7 +21,8 @@ class NewPasswordController extends Controller
      */
     public function create(Request $request)
     {
-        return view('auth.reset-password', ['request' => $request]);
+        $settings = Systemsettings::first();
+        return view('auth.reset-password', ['request' => $request],compact('settings'));
     }
 
     /**

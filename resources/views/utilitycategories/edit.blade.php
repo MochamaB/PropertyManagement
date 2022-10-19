@@ -3,10 +3,18 @@
 @section('content')
 <div class="container">
     <div class="row">
+    <div class="col-auto col-md-10 ">
+             <nav aria-label="breadcrumb " class="first d-md-flex">
+                 <ol class="breadcrumb indigo lighten-6 first-1 shadow-lg mb-5 ">
+                     <li class="breadcrumb-item font-weight-bold"><a class="black-text text-uppercase " href="#" style="text-decoration: none !important;"><span>&nbsp;Operations</span></a><img class="ml-md-3" src="{{ asset('Templateassets/img/double-right.png') }}" width="20" height="20"> </li>
+                     <li class="breadcrumb-item font-weight-bold"><a class="black-text text-uppercase" href="#" style="text-decoration: none !important;" ><span>utilities</span></a><img class="ml-md-3" src="{{ asset('Templateassets/img/double-right.png') }}" width="20" height="20"></li>
+                     <li class="breadcrumb-item font-weight-bold mr-0 pr-0"><a class="black-text active-1" href="#" style="text-decoration: none !important;"><span style="color:blue">Edit Utilities</span></a> </li>
+                 </ol>
+             </nav>
+         </div>
+
         <div class="col-md-8">
-            @if (session('status'))
-            <h6 class="alert alert-success">{{ session('status') }}</h6>
-            @endif
+        @include('layouts.partials.messages')	
 
             <div class="card">
                 <div class="card-header">
@@ -20,6 +28,11 @@
                     <form action="{{ url('update-utilitycategories/'.$utilitycategories->id) }}" method="POST">
                         @csrf
                         @method('PUT')
+                        
+                        <div class="form-group mb-3">
+                            <label for="">Name</label>
+                            <input type="text" name="name" value="{{$utilitycategories->name}}" class="form-control" readonly/>
+                        </div>
 
                          <div class="form-group mb-3">
                             <label for="">Bill Cycle:<span style="font-style:italic"> (Per Month or Per Unit)</span> </label>

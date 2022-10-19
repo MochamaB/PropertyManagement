@@ -51,8 +51,9 @@
                                     <span class="text-danger" style="font-size:12px;font-weight:700;">{{ $errors->first('price') }}</span>
                                 @endif
                         </div>
-                        @if( Auth::user()->can('Apartments.create'))
+                       
                         <div class="form-group mb-3">
+                        @if( Auth::user()->can('Apartments.create'))
                                                 <label  style="font-size:13px;font-weight:500;">Apartment <span style="color:red;font-size:20px">*</span></label></br>
                                                 <select class="formcontrol2" name="apartment_id" required>
                                                     <option value="">Select Apartment</option>

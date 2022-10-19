@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\invoiceMail;
+use App\Mail\AutoinvoiceMail;
 use App\Mail\receiptMail;
 use App\Mail\workorderMail;
 use Illuminate\Support\Facades\Mail;
@@ -215,5 +216,80 @@ class EmailController extends Controller
                         ->get();
 
         return view('emails.sentemailInvoice',compact('sent'));
+    }
+
+
+    public function autoinvoiceEmail(){
+
+        $invoicedate =  Carbon::now();
+        $invoicelist = Invoice::with(['houses','leases','apartments','payments','utilitycategories','tenants'])
+                              ->whereYear('invoices.invoicedate', '=', Carbon::parse($invoicedate)->year)
+                              ->whereMonth('invoices.invoicedate', '=', Carbon::parse($invoicedate)->month)
+                       ->get();
+
+        foreach($invoicelist as $invoice){
+
+            $previousbalancedue = invoice::selectRaw('SUM(amountdue) as totaldue')
+                       ->where('lease_id',$invoice->lease_id)
+                       ->where('invoicetype',$invoice->invoicetype)
+                       ->where('invoicedate', '<',$invoice->invoicedate)
+                       ->first();
+            
+            $previousbalancepaid = payments::selectRaw('SUM(amountpaid) as totalpaid')
+                        ->where('lease_id',$invoice->lease_id)
+                        ->where('paymentitem',$invoice->invoicetype)
+                        ->where('invoicedate', '<',$invoice->invoicedate)
+                        ->first();
+
+            $putil = Invoice::select('parent_utility','invoiceno')
+                        ->where('lease_id',$invoice->lease_id)
+                        ->where('invoicetype',$invoice->invoicetype)
+                        ->where('invoicedate', '<',$invoice->invoicedate)
+                        ->get();
+
+             if($previousbalancedue->totaldue == null){
+                        $previousbalputil = collect($previousbalancedue);  
+                }
+             else{
+                        foreach($putil as $parentU){
+                        $previousbalputil = collect($parentU->parent_utility);
+                                    }
+                 }
+
+            $previousmonthsbalance = ($previousbalancedue->totaldue + $previousbalputil->sum('amount') )- $previousbalancepaid->totalpaid;
+            $readings = Readings::whereMonth('fromdate', '=',Carbon::parse($invoice->invoicedate)->month)
+                                ->whereYear('fromdate', '=',Carbon::parse($invoice->invoicedate)->year)
+                                ->where('lease_id',$invoice->lease_id)
+                                ->first();
+
+            $paymenttype = Paymenttypes::where('bank','Safaricom')->first();
+
+            $parentutilsum = collect($invoice->parent_utility);
+
+            $total = ($invoice->amountdue + $previousmonthsbalance + $parentutilsum->sum('amount')) - $invoice->payments->sum('amountpaid');
+
+            $to = $invoice->tenants->email;
+            $from = $invoice->apartments->email;
+            
+            Mail::to($to)->send(New AutoinvoiceMail($invoice,$previousmonthsbalance,$readings,$parentutilsum,$total,$paymenttype));
+
+            $sentemail = SentEmail::updateOrCreate(
+                [
+                     'item_id'    => $invoice->id
+                 ], 
+                 [
+                        'lease_id'  => $invoice->lease_id,
+                        'item_id'  => $invoice->id,
+                        'itemno'  => $invoice->invoiceno,
+                        'mailto' => $to,
+                        'mailfrom' => $from,
+                        'recepientname' => $invoice->tenants->firstname.''.$invoice->tenants->lastname
+                 ]
+           
+                 );
+
+        }
+
+
     }
 }

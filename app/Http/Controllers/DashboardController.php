@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\house;
+use App\Models\Systemsettings;
 
 class DashboardController extends Controller
 {
@@ -15,9 +16,10 @@ class DashboardController extends Controller
     public function index()
     {
         $house= house::all();
+        $settings = Systemsettings::first();
         $occupied = house::where('status','occupied')->count('status');
         $vacant = house::where('status','Empty')->count('status');
-        return View('dashboard',compact('house','occupied','vacant'));
+        return View('dashboard',compact('house','occupied','vacant','settings'));
     }
     public function newUSer()
     {

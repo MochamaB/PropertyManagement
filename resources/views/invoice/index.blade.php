@@ -49,7 +49,7 @@
                 </div>
 
                   <div class="tab-content">
-                  <div id="all" class="tab-pane fade show {{ (request()->segment(1) == 'invoices') ? 'active' : '' }}">
+                        <div id="all" class="tab-pane fade show {{ (request()->segment(1) == 'invoices') ? 'active' : '' }}">
                             <h4>List of All Invoices</h4>
                             @include('invoice.indexGroupInvoice')
                             
@@ -61,7 +61,8 @@
                     <div id="{{$item->name}}" class="tab-pane fade show {{ (request()->segment(3) == $item->name) ? 'active' : '' }} ">
 
                             <h4>List of {{$item->name}}  Invoices</h4>
- 
+
+                    @if($task->status == 0)
                           <form action="{{ url('generateinvoice') }}" method="POST">
                               @csrf
                                         </br></br>
@@ -84,7 +85,16 @@
                                         <hr>
                                         
                                 </form>
-                                     <!-- partial -->
+                    @else
+                      <div class="alert alert-success alert-dismissible fade show" id="welcomemessage" role="alert" style="border-left:5px solid #34B1AA;">
+                     <h4><strong>Invoice Auto Generation is Active </strong><h4>  
+                        <button type="button" class="btn-success float-end" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h6>Go to <a href="{{ url('tasks/') }}" class="alert-link">tasks module to disable</a> <h6>
+                </div>
+                  @endif  
+                                   <!-- partial -->
                                     
                                      @include('invoice.indexGroupInvoice')
                      

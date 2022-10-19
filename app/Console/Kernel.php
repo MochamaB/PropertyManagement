@@ -4,6 +4,8 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Models\Task;
+use Carbon\Carbon;
 
 class Kernel extends ConsoleKernel
 {
@@ -19,8 +21,17 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('generate:invoice')->everyTwoMinutes();
+        $tasks = Task::where('type','invoice')->first();
+        
+            $frequency = $tasks->frequency;
+            $date = $tasks->date;
+            $time = $tasks->time;
+        $schedule->command('generate:invoice')->$frequency($date, $time);
         // $schedule->command('inspire')->hourly();
+    
+        
+
+        
     }
 
     /**

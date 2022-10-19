@@ -82,7 +82,7 @@
                             
                         </div>
                         <div class="form-group mb-3" id="rate">
-                            <label for=""><span style="color:red;font-size:20px">*</span>Rate <span style="color:red;font-size:20px">*</span></label>
+                            <label for=""><span style="color:red;font-size:20px">*</span>Rate (per unit/ per month) <span style="color:red;font-size:20px">*</span></label>
                             <input type="text" name="rate"  class="form-control" value="{{ old('rate') }}"/>
                             @if ($errors->has('rate'))
                                             <span class="text-danger" style="font-size:12px">{{ $errors->first('rate') }}</span>
@@ -111,8 +111,12 @@
             jQuery('#parentname').show();   
             jQuery('#Units').hide();
             jQuery('#Fromlease').hide();
+            jQuery('#Maintenance').hide();
         } else {
             jQuery('#parentname').hide();
+            jQuery('#Units').show();
+            jQuery('#Fromlease').show();
+            jQuery('#Maintenance').show();
            
         }
     });

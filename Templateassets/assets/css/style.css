@@ -193,11 +193,13 @@ input[type="search"]::-webkit-search-decoration {
 }
 .btn-default{
     color: #777777;
-    border-color: #999999
+    border-color: #999999;
+    background-color: #777777;
 } 
 .btn-info{
-    color: #2CA8FF;
-    border-color: #2CA8FF;
+    color: #fff;
+    border-color: #999999;
+    background-color: #777777;
 }
 .btn-success{
     color: #05AE0E;
@@ -224,8 +226,8 @@ input[type="search"]::-webkit-search-decoration {
     background-color: rgba(0,0,0,.0);
 }
 .btn-info:hover, .btn-info:focus, .btn-info:active, .btn-info.active, .open .dropdown-toggle.btn-info {
-    color: #109CFF;
-    border-color: #109CFF;
+    color: #777777;;
+    border-color: #777777;
     background-color: rgba(0,0,0,.0);
 }
 .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .open .dropdown-toggle.btn-success {

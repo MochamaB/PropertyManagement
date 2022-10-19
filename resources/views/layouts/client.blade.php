@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Property Management</title>
+    <title>{{$settings->systemname}}</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -38,14 +38,14 @@
     <div class="header-connect">
         <div class="container">
             <div class="row">
-                <div class="col-md-5 col-sm-8  col-xs-12">
+                <div class="col-md-6 col-sm-8  col-xs-12">
                     <div class="header-half header-call">
                         <p>
                             <span>
-                                <i class="pe-7s-call"></i><b>Call 0720 672064</b>
+                                <i class="pe-7s-call"></i><b>Call {{$settings->phonenumber}}</b>
                             </span>
                             <span>
-                                <i class="pe-7s-mail"></i><b> info@mjhingapropertyagency.co.ke</b>
+                                <i class="pe-7s-mail"></i><b> {{$settings->email}}</b>
                             </span>
                         </p>
                     </div>
@@ -103,7 +103,9 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="index.php">
-                    <img src="{{ asset('Templateassets/img/logo2edit.png') }}" alt="" style="width:310px; height:200px;margin-top:-65px;" />
+                <img src="{{ url('uploads/Images/'.$settings->logo) }}"
+                style="width:210px; height:100px;margin-top:-55px;" />
+                    
                 </a>
             </div>
 

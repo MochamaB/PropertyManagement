@@ -18,6 +18,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\RepairworkController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\SystemsettingsController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,12 +37,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/', [HomeController::class, 'index'])->name('Home.index');
 
 
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('Dashboard');    
 
-Route::group(['middleware' => ['auth','permission']], function () {
+
+Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->middleware(['auth','verified'])
+            ->name('Dashboard');    
+
+Route::group(['middleware' => ['auth','verified','permission']], function () {
 
  
 
@@ -69,6 +77,7 @@ Route::put('update-housemanagers/{id}', [HouseController::class, 'updateManagers
 
 /*     Tenant Routes    */
 Route::get('add-tenants', [TenantsController::class, 'create'])->name('Tenants.create');
+
 Route::post('add-tenants', [TenantsController::class, 'store'])->name('Tenants.store');
 Route::get('tenants', [TenantsController::class, 'index'])->name('Tenants.view');
 Route::get('edit-tenants/{ID}', [TenantsController::class, 'edit'])->name('Tenants.edit');
@@ -189,6 +198,7 @@ Route::get('send-InvoiceEmail/{id}/{lease_id}/{invoicedate}/{invoicetype}', [Ema
 Route::get('previewEmail/{id}/{lease_id}/{invoicedate}/{invoicetype}', [EmailController::class, 'previewEmail'])->name('preview');
 Route::get('sent-invoice-emails', [EmailController::class, 'sentInvoiceEmails'])->name('Email.sentinvoice');
 
+Route::get('send-AutomaticInvoiceEmail', [EmailController::class, 'autoinvoiceEmail'])->name('Email.auto_invoice');
 Route::get('send-PaymentEmail/{invoice_id}', [EmailController::class, 'receiptMail'])->name('Email.receipt');
 Route::get('send-workorderEmail/{maintenance_id}', [EmailController::class, 'workorderMail'])->name('Email.workorder');
 
@@ -229,13 +239,34 @@ Route::get('delete-apartments/{id}', [ApartmentController::class, 'destroy'])->n
 
 
 
-
-
-
 /////////////  Error Routes /////////////////
 Route::fallback(function(){
     return view('errors.404');
 });
+/////////////////////////////////////
+
+
+/*     Tasks Routes    */
+
+Route::get('add-task', [TaskController::class, 'create'])->name('Task.create');
+Route::post('add-task', [TaskController::class, 'store'])->name('Task.store');
+Route::get('tasks', [TaskController::class, 'index'])->name('Task.view');
+Route::get('edit-task/{id}', [TaskController::class, 'edit'])->name('Task.edit');
+Route::put('update-task/{id}', [TaskController::class, 'update'])->name('Task.update');
+
+Route::get('delete-task/{id}', [TaskController::class, 'destroy'])->name('Task.destroy');
+
+/*     System Settings Routes    */
+
+Route::get('add-setting', [SystemsettingsController::class, 'create'])->name('Settings.create');
+Route::post('add-setting', [SystemsettingsController::class, 'store'])->name('Settings.store');
+Route::get('settings', [SystemsettingsController::class, 'index'])->name('Settings.view');
+Route::get('edit-setting/{id}', [SystemsettingsController::class, 'edit'])->name('Settings.edit');
+Route::put('update-setting/{id}', [SystemsettingsController::class, 'update'])->name('Settings.update');
+
+Route::get('delete-setting/{id}', [SystemsettingsController::class, 'destroy'])->name('Settings.destroy');
+
+Route::get('add-tenantfromuser/{id}', [TenantsController::class, 'createfromuser'])->name('Tenants.create_from_users');
 
 
 

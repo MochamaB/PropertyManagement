@@ -70,7 +70,7 @@ class ApartmentController extends Controller
             if($request->file('logo')){
                 $file= $request->file('logo');
                 $filename= date('YmdHi').$file->getClientOriginalName();
-                $file-> move(public_path('uploads/Images'), $filename);
+                $file-> move(base_path('uploads/Images'), $filename);
                 $apartment['logo']= $filename;
             }
             $apartment->location = $request->input('location');
@@ -79,7 +79,7 @@ class ApartmentController extends Controller
             if($request->file('signature_photo')){
                 $file= $request->file('signature_photo');
                 $filename= date('YmdHi').$file->getClientOriginalName();
-                $file-> move(public_path('uploads/Images'), $filename);
+                $file-> move(base_path('uploads/Images'), $filename);
                 $apartment['signature_photo']= $filename;
             }
 
@@ -142,7 +142,7 @@ class ApartmentController extends Controller
             if($request->file('logo')){
                 $file= $request->file('logo');
                 $filename= date('YmdHi').$file->getClientOriginalName();
-                $file-> move(public_path('uploads/Images'), $filename);
+                $file-> move(base_path('uploads/Images'), $filename);
                 $apartment['logo']= $filename;
             }
             $apartment->location = $request->input('location');
@@ -151,7 +151,7 @@ class ApartmentController extends Controller
             if($request->file('signature_photo')){
                 $file= $request->file('signature_photo');
                 $filename= date('YmdHi').$file->getClientOriginalName();
-                $file-> move(public_path('uploads/Images'), $filename);
+                $file-> move(base_path('uploads/Images'), $filename);
                 $apartment['signature_photo']= $filename;
             }
 

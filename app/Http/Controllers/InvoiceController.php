@@ -17,6 +17,7 @@ use App\Models\utilitiesassigned;
 use App\Models\Readings;
 use App\Models\paymenttypes;
 use App\Models\SentEmail;
+use App\Models\Task;
 use Illuminate\Support\Str;
 use PDF;
 
@@ -45,9 +46,10 @@ class InvoiceController extends Controller
                         ->groupBy('year','invoices.invoicetype')
                         ->orderBy('year','desc')
                         ->get(); 
+        $task = Task::where('type','invoice')->first();
 
          
-         return view('invoice.index', compact('yearinvoicegrouping','categoryitems')); 
+         return view('invoice.index', compact('yearinvoicegrouping','categoryitems','task')); 
     }
      
     public function indexmonth($year,$invoicetype)
@@ -66,8 +68,9 @@ class InvoiceController extends Controller
                             ->orderBy('month','desc')
                             ->get();
         $invtype = Invoice::where('invoicetype',$invoicetype)->pluck('invoicetype');
+        $task = Task::where('type','invoice')->first();
 
-        return view('invoice.index', compact('invoicegrouping','invtype','invoicetype','categoryitems')); 
+        return view('invoice.index', compact('invoicegrouping','invtype','invoicetype','categoryitems','task')); 
 
     }
     //////////// get the List detail view for all invoices
@@ -217,7 +220,7 @@ class InvoiceController extends Controller
 
                     $invoicenodate = Carbon::parse($request->invoicedate)->format('ym');
                    
-                    invoice::updateorCreate([
+                    $invoice = invoice::updateorCreate([
                             'invoiceno' => $utildetails->prefix.$invoicenodate.$row->housenumber,
                             'lease_id' =>$lease_id,
                             'utilitycategory_id' =>$utildetails->id,
@@ -237,12 +240,114 @@ class InvoiceController extends Controller
 
                      
 
-        return redirect('/invoices')->with('status','Invoices for '. $request->utilcateg. ' created Successfully');
+        return redirect('invoices')->with('status','Invoices for '. $request->utilcateg. ' created Successfully');
  
     }
 
-   
+  //////////////////////////////////// AUTO GENERATE ///////////////////////////////////
 
+    public function autogenerateinvoice()
+        {
+            $utildetails = Utilitycategories::where('create_invoice',1)->get();
+            $today =  Carbon::now();
+            $lastDayofMonth =    \Carbon\Carbon::parse($today)->endOfMonth()->toDateString();
+  
+
+            
+///////// Get all the Utility Types that are allowed to generate Invoice.
+        foreach($utildetails as $utilrow)
+            {
+            
+        
+            if($utilrow->billcycle =='Units'){
+                    $leasedetails = lease::join('houses','houses.id','=','lease.house_id') 
+                                     ->join('readings','readings.lease_id','=','lease.id')
+                                     ->whereMonth('fromdate', '=',Carbon::parse($today)->month)
+                                     ->whereYear('fromdate', '=',Carbon::parse($today)->year)
+                                     ->where('lease.status','Active') 
+                                     ->select('lease.id','houses.housenumber','readings.amountdue')
+                                     ->get();
+            }
+             elseif($utilrow->billcycle =='Maintenance'){
+                    $leasedetails = Lease::join('maintenance','maintenance.lease_id','=','lease.id')
+                                                ->join('repairwork','repairwork.maintenance_id','=','maintenance.id')
+                                                ->join('houses', 'houses.id', '=', 'lease.house_id')
+                                                ->whereMonth('maintenance.created_at', '=',Carbon::parse($today)->month)
+                                                ->whereYear('maintenance.created_at', '=',Carbon::parse($today)->year)
+                                                ->where('maintenance.billtype','Income')
+                                                ->where('repairwork.status','Completed')
+                                                ->where('lease.status','Active') 
+                                                ->select('lease.id','repairwork.amountspent','repairwork.amountpaid','houses.housenumber')
+                                                ->selectRaw('(repairwork.amountspent + repairwork.amountpaid) as totalamount')
+                                                ->get();
+
+         
+             } else{
+
+                    $leasedetails = lease::join('houses','houses.id','=','lease.house_id') 
+                                         ->where('lease.status','Active')              
+                                        ->select('lease.id','lease.rent','houses.housenumber')
+                                        ->get();
+                    }
+    ////// Get all the Houses that have an active lease
+
+                foreach($leasedetails as $row){
+                    $lease_id = $row->id;    
+                    $invoicetype = $utilrow->name;
+                
+                    if($utilrow->billcycle =='Fromlease'){    
+                                $amountdue = $row->rent;               
+                    }
+                    elseif($utilrow->billcycle =='Permonth'){
+                                $amountdue = $utilrow->rate;
+                    }
+                    elseif($utilrow->billcycle =='Maintenance'){
+                                $amountdue = $row->totalamount;
+                    }
+                    elseif($utilrow->billcycle =='Units'){
+                        $amountdue = $row->amountdue;       
+                    }
+    //// Attach the parent_utility charge to invoice //////////////////////////
+                         $parentutilities = Utilitycategories::join('utilitycategory as UT2','utilitycategory.id','=','UT2.parent_utility')
+                                        ->where('utilitycategory.name',$invoicetype)
+                                        ->select('UT2.name','UT2.rate','UT2.billcycle','UT2.parent_utility')
+                                        ->get();
+
+                    
+                        $parentutility = array();
+                        foreach($parentutilities as $putil){
+                            $parentutility[] = array(
+                                'utilname' =>$putil->name,
+                                'amount' => $putil->rate,
+                            );
+                        }
+
+                    
+                    $invoicedate = $today;
+                    $duedate = $lastDayofMonth;
+
+                    $invoicenodate = Carbon::parse($invoicedate)->format('ym');
+                
+                    $invoice = invoice::updateorCreate([
+                            'invoiceno' => $utilrow->prefix.$invoicenodate.$row->housenumber,
+                            'lease_id' =>$lease_id,
+                            'utilitycategory_id' =>$utilrow->id,
+                            'parent_utility' =>$parentutility,  
+                            'invoicetype' =>$invoicetype,
+                            'amountdue' => $amountdue,
+                            'expensetype' => 'Income',
+                            'duedate' =>$duedate,
+                            'invoicedate' => $invoicedate,
+                            'raised_by' => '',
+                            'reviewed_by'=>''
+                        ]);
+                }
+                    
+
+            }
+
+          //  return redirect('send-AutoInvoiceEmail/'.$invoice->invoicedate);
+        }
        
 
     
@@ -349,18 +454,28 @@ class InvoiceController extends Controller
                                     ->where('invoicedate', '<',$invoicedate)
                                     ->first();
 
-        $putil = Invoice::select('parent_utility')
+        $putil = Invoice::select('parent_utility','invoiceno')
                         ->where('lease_id',$lease_id)
                         ->where('invoicetype',$invoicetype)
                         ->where('invoicedate', '<',$invoicedate)
                         ->get();
 
+           
+        if($previousbalancedue->totaldue == null){
+                $previousbalputil = collect($previousbalancedue);  
+                }
+        else{
         foreach($putil as $parentU){
-        $previousbalputil = collect($parentU->parent_utility);
+            $previousbalputil = collect($parentU->parent_utility);
+                
+            }
         }
         
-        $previousmonthsbalance = ($previousbalancedue->totaldue + $previousbalputil->sum('amount'))- $previousbalancepaid->totalpaid;
 
+        
+       
+    
+        $previousmonthsbalance = ($previousbalancedue->totaldue + $previousbalputil->sum('amount') )- $previousbalancepaid->totalpaid;
         $readings = Readings::whereMonth('fromdate', '=',Carbon::parse($invoicedate)->month)
                             ->whereYear('fromdate', '=',Carbon::parse($invoicedate)->year)
                             ->where('lease_id',$lease_id)

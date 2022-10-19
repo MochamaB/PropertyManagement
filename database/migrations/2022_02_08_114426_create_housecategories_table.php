@@ -17,7 +17,7 @@ class CreateHousecategoriesTable extends Migration
             $table->increments('id');
             $table->unsignedBigInteger('apartment_id');
             $table->string('type',100);
-            $table->decimal('price')->nullable();
+            $table->string('price')->nullable();
             $table->decimal('rent');
             $table->decimal('setdeposit');
             $table->string('description',100)->nullable();

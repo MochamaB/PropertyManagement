@@ -27,6 +27,7 @@ class UsersController extends Controller
     {
         
         $apartment = User::latest()->paginate(10);
+        $tenant = Tenant::where('email',);
 
         if (Auth::user()->id != 1) {
            $users= User::where('apartment_id',Auth::user()->apartment_id)->get();
@@ -140,10 +141,19 @@ class UsersController extends Controller
 
         $user->syncRoles($request->get('role'));
 
-        
+        $usersrole = $request->get('role');
+        $role = Role::where('name','Tenant')->select('id')->first();
 
-        return redirect()->route('Users.view')
-        ->with('status','User updated successfully.');
+        if($usersrole == $role->id){
+            if(Tenant::where('email',$user->email)->exists()){
+                return redirect()->route('Users.view') ->with('status','User updated successfully.');  
+            }
+            return redirect('add-tenantfromuser/'.$user->id)
+            ->with('status','User updated successfully. Finish tenant registration below');
+        }
+            return redirect()->route('Users.view')
+            ->with('status','User updated successfully.');
+        
     }
 
     /**

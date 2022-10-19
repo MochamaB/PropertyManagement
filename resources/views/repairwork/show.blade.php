@@ -73,7 +73,7 @@
                                                 <li class="text-bold-800"><b> Name:</b>{{$workorder->firstname}} {{$workorder->lastname}}</li>
                                                 <li><b>House No:</b>{{$workorder->housenumber}} ,</li>
                                                 <li><b>id:</b>{{$workorder->idnumber}} ,</li>
-                                                <li><b>Email:</b> {{$workorder->email}} ,</li>
+                                                <li><b>Email:</b> {{$workorder->temail}} ,</li>
                                                 <li><b>Phone No:</b> {{$workorder->phonenumber}},</li>
                                                
                                               </ul>
@@ -84,7 +84,7 @@
                                         
                                         <p style="font-weight:700;font-size:16px;">PRIORITY:{{$workorder->priority}}</p>
                                         @if( $workorder->status == 'Completed' )
-                                                     <div style="background-color:green;font-size:17px" class="badge badge-opacity-warning"> COMPKETED</div> <!------Status -->
+                                                     <div style="background-color:green;font-size:17px" class="badge badge-opacity-warning"> COMPLETED</div> <!------Status -->
                                                      @elseif( $workorder->status == 'Out of supplies'  )
                                                      <div style="background-color:darkorange;font-size:17px" class="badge badge-opacity-warning"> OUT OF SUPPLIES</div>
                                                      
@@ -99,7 +99,7 @@
 
                             </div>
                             <div class="col-md-7 " style="text-align:middle;">
-                                        <p style="color:blue; font-weight:700;font-size:16px;"><b>TITLE: {{$workorder->name}}</b></p>
+                                        <p style="color:blue; font-weight:700;font-size:16px;"><b>TITLE: {{$workorder->title}}</b></p>
                                         <p style="font-weight:700;font-size:16px;"><b>1. Short Description of Problem </b></p>
                                         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$workorder->description}} </p>
                                         <hr/>

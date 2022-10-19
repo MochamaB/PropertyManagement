@@ -10,7 +10,7 @@
 										<br /><br />
 										<h1 class="h3 text-gray-900 mb-4">
 											<b>
-												<b>MJ. Hinga Propert Agency System</b>
+                                            <b>{{$settings->systemname}}</b>
 											</b><br /><br />Reset Password
 										</h1>
 									</div>

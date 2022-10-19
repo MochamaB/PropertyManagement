@@ -29052,7 +29052,7 @@ div.tagsinput span.tag a {
 }
 
 .sidebar .nav .nav-item.active {
-  border-radius: 0px 20px 20px 0px;
+  border-radius: 0px 0px 0px 0px;
 }
 
 .sidebar .nav .nav-item.active > .nav-link {
@@ -29060,6 +29060,7 @@ div.tagsinput span.tag a {
   position: relative;
   font-weight: bold;
   font-size: 13px;
+  border-radius: 0px 0px;
 }
 
 .sidebar .nav .nav-item.active > .nav-link i,
