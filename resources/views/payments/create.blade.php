@@ -19,7 +19,84 @@
 
 
 
+
 <!---------  breadcrumbs ---------------->
+                                  <!---- ----------------------   Unpaid Modal Section-------------- -->
+                                  
+                       
+                                  
+                                
+                        
+                                  <div class="modal fade" id="invoicesnotpaid" tabindex="-1" role="dialog" aria-labelledby="invoicesnotpaid" aria-hidden="true">
+                                  <div class="modal-dialog" role="document" style="max-width:900px ;">
+                                    <div class="modal-content ">
+                                      <div class="modal-header" style="background-color:darkblue;">
+                                        <h4 class="modal-title" id="exampleModalLabel" style="color:white;">Overdue Invoices</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body ">
+                                      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong>Warning! </strong> 
+                                            The following {{$invoice->invoicetype}} Invoices for the House/Tenant are overdue. Please Pay before proceeding!!!
+                                     </div>
+                                    <div class="table-responsive">
+                                    <table id="table"
+                                            data-toggle="table"
+                                            data-icon-size="sm"
+                                                class="table table-hover table-striped"
+                                                style="font-size:12px">
+                                                <thead  class="sticky-header">
+                                                        <tr class="tableheading">
+                                                            <th data-sortable="true">Invoice Date</th>
+                                                            <th data-sortable="true">Invoice No</th>
+                                                            <th data-sortable="true">Details</th>
+                                                            <th data-sortable="true">Amount Due</th>
+                                                            <th>Amount Paid</th>
+                                                            <th data-sortable="true">Balance</th>
+                                                            <th>Actions</th>
+                                        
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody style="padding-left:0; padding-right:0px">
+                                                    @foreach($invoicesnotpaid as $item)
+                                                    @if ($item->invoiceno != null) 
+                                                        <script>$('#invoicesnotpaid').modal('show')</script>
+                                                    @else
+                                                    <script>$('#invoicesnotpaid').modal('hide')</script>
+                                                    @endif
+                                                    @if(($item->amountdue + $parentutilsum->sum('amount') - $item->amountpaid) != 0 )
+                                                    <tr>
+                                                            <td>{{\Carbon\Carbon::parse($item->invoicedate)->format('d M Y')}}</td> 
+                                                            <td>{{$item->invoiceno}}</td>
+                                                            <td>{{$item->housenumber}}- {{$item->firstname}} {{$item->lastname}}</td>
+                                                            <td>{{$item->amountdue + $parentutilsum->sum('amount')}}</td>
+                                                           @if($item->amountpaid != 0)
+                                                            <td>{{$item->amountpaid}}</td>
+                                                            @else<td>0</td>
+                                                            @endif
+                                                            <td>{{$item->amountdue + $parentutilsum->sum('amount') - $item->amountpaid}} </td>
+                                                            <td>  
+                                                                <a href="{{ url('invoices/ListInvoices/'.\Carbon\Carbon::parse($item->invoicedate)->format('Y'). '/' . Carbon\Carbon::parse($item->invoicedate)->format('M'). '/' .$item->invoicetype) }}" class="btn btn-dark btn-sm"><i class="mdi mdi-cash-usd"></i></i>Go to Invoices<i class="mdi mdi-cash-usd"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                    @endforeach
+                                                    </tbody>
+                                    </table>
+                                    </div>                                  
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Proceed Anyway!</button>
+                        
+                                      
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                   
+                                <!---- ----------------------   End Modal Section-------------- -->
     <div class="row justify-content-center">
         <div class="col-md-10">
         @include('layouts.partials.messages')	
@@ -31,7 +108,10 @@
 
                 </div>
                 <div class="card-body">
-
+             @foreach($invoicesnotpaid as $item)
+                <label for="">XXXXXXXXXX</label>
+             @endforeach   
+            
                     <form action="{{ url('add-payment') }}" method="POST">
                         @csrf
                     <div class="row">

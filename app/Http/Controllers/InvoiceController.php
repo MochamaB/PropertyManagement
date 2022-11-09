@@ -97,6 +97,7 @@ class InvoiceController extends Controller
             $parentutilsum = collect($item->parent_utility);
             
         }
+        
       
          return view('invoice.ListInvoice',compact('details','invoice','categoryitems','parentutilsum'));
     }

@@ -216,7 +216,7 @@
                                 <div class="col">
                                         <p class="mb-0 mt-1">Authorized person</p>
                                     <img src="{{ asset('Templateassets/img/signature.png') }}" alt="signature" class="height-100" />
-                                    <h6>MJ HINGA</h6>
+                                    <h6>{{$invoice->apartments->authorized_person}}</h6>
                                     <p class="text-muted">Managing Director</p>
                                 </div>
                             </div>

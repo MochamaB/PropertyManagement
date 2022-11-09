@@ -28923,7 +28923,7 @@ div.tagsinput span.tag a {
 /* Sidebar */
 .sidebar {
   min-height: calc(100vh - 97px);
-  background: #F4F5F7;
+  background: #fff;
   font-family: "Manrope", sans-serif;
   font-weight: 500;
   padding: 0;
@@ -28940,6 +28940,7 @@ div.tagsinput span.tag a {
   flex-wrap: nowrap;
   flex-direction: column;
   margin-bottom: 60px;
+  
 }
 
 .sidebar .nav .nav-item {
@@ -29305,7 +29306,8 @@ div.tagsinput span.tag a {
 }
 
 .navbar .navbar-brand-wrapper {
-  background: #F4F5F7;
+  border-right: 1px solid #dee2e6;
+  background: #fff;
   transition: width 0.25s ease, background 0.25s ease;
   -webkit-transition: width 0.25s ease, background 0.25s ease;
   -moz-transition: width 0.25s ease, background 0.25s ease;

@@ -191,7 +191,7 @@
               </ul>
               
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="{{ url('/readings') }}">Send Email</a></li>
+                <li class="nav-item"> <a class="nav-link" href="">Send Email</a></li>
               </ul>
             </div>
           </li>
@@ -203,10 +203,10 @@
             </a>
             <div class="collapse" id="SMS">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="{{ url('/utilitycategories') }}">Sent SMS</a></li>
+                <li class="nav-item"> <a class="nav-link" href="">Sent SMS</a></li>
               </ul>
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="{{ url('/readings') }}">Send SMS</a></li>
+                <li class="nav-item"> <a class="nav-link" href="">Send SMS</a></li>
               </ul>
             </div>
           </li>
@@ -219,7 +219,7 @@
             </a>
             <div class="collapse" id="charts">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/charts/chartjs.html">Report Per Month</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{ url('/reports') }}">View Reports</a></li>
               </ul>
             </div>
           </li>
@@ -267,7 +267,7 @@
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#system" aria-expanded="false" aria-controls="settings">
               <i class="menu-icon mdi mdi-settings"></i>
-              <span class="menu-title">System Configurations</span>
+              <span class="menu-title">System Configs</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="system">

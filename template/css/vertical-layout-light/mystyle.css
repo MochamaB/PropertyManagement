@@ -385,18 +385,51 @@ label {
     
 }
 
+.navbar .navbar-brand-wrapper {
+    border-right: 1px solid #dee2e6;
+    background: #fff;
+    transition: width 0.25s ease, background 0.25s ease;
+    -webkit-transition: width 0.25s ease, background 0.25s ease;
+    -moz-transition: width 0.25s ease, background 0.25s ease;
+    -ms-transition: width 0.25s ease, background 0.25s ease;
+    width: 220px;
+    height: 97px;
+    padding: 20px 35px;
+  }
+
 .sidebar .nav .nav-item.active {
     border-radius: 0px 0px 0px 0px;
+    background: #F4F5F7;
     border-top: 1px solid #0576f8;
     border-bottom: 1px solid #0576f8;
   }
   
   .sidebar .nav .nav-item.active > .nav-link {
-    background: #fff;
+    background: #F4F5F7;
     position: relative;
     font-weight: bold;
     font-size: 13px;
     border-radius: 0px 0px;
     
 
+  }
+
+  .sidebar .nav.sub-menu {
+    margin-bottom: 0;
+    margin-top: 0;
+    list-style: none;
+    padding: 0.25rem 0 0 3.07rem;
+    background: #F4F5F7;
+    padding-bottom: 12px;
+  }
+  .sidebar .nav:not(.sub-menu) > .nav-item > .nav-link[aria-expanded="true"] {
+    border-radius: 8px 8px 0 0;
+    background: #F4F5F7;
+    color: #1F3BB3;
+  }
+  .sidebar .nav.sub-menu .nav-item .nav-link.active {
+    color: #1F3BB3;
+    background: transparent;
+    border-left: 5px solid #1F3BB3;
+    
   }

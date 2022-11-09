@@ -84,34 +84,40 @@ class EmailController extends Controller
 
     }
 
-    public function receiptMail(Request $request, $invoice_id){
+    public function receiptMail(Request $request,$id){
         
         
+        $payment = payments::with(['houses','leases','apartments','tenants','invoices']) 
+        ->find($id);
+
         $receiptdetails = payments::join('invoices','invoices.id','=','payments.invoice_id')
-                                  ->join('lease','lease.id','=','invoices.lease_id')
-                                  ->join('tenants','tenants.id','=','lease.tenant_id')
-                                  ->join('houses','houses.id','=','lease.house_id')
-             ->select('payments.lease_id','payments.invoiceno','payments.receiptno','payments.paymentitem','tenants.firstname','tenants.lastname'
-                      ,'houses.housenumber','tenants.idnumber','tenants.email','tenants.phonenumber','invoices.invoicedate','invoices.duedate',
-                      'payments.created_at','invoices.amountdue','payments.amountpaid')
-                                  ->where('payments.invoice_id',$invoice_id)
-                                  ->first();
-        $receiptpayments = payments::select('invoiceno','created_at','receiptno','amountpaid')
-                                    ->selectRaw('SUM(amountpaid) as totalpaid')
-                                   ->where('invoice_id',$invoice_id)
-                                   ->groupBy('invoiceno','created_at','receiptno','amountpaid')
-                                    ->get();
+              ->join('lease','lease.id','=','invoices.lease_id')
+              ->join('tenants','tenants.id','=','lease.tenant_id')
+              ->join('houses','houses.id','=','lease.house_id')
+              ->join('apartment','apartment.id','=','lease.apartment_id')
+              ->select('payments.invoice_id','payments.invoiceno','payments.receiptno','payments.paymentitem','payments.lease_id','tenants.firstname','tenants.lastname'
+                    ,'houses.housenumber','tenants.idnumber','tenants.email','tenants.phonenumber','invoices.invoicedate','invoices.duedate','invoices.invoiceno',
+                    'payments.created_at','invoices.amountdue','payments.amountpaid','apartment.name','apartment.logo','apartment.postalcode','apartment.location',
+                    'apartment.email as apemail','apartment.authorized_person')
+                                ->where('payments.invoice_id',$id)
+                                ->first();
+            $receiptpayments = payments::select('invoiceno','created_at','receiptno','amountpaid')
+                            ->selectRaw('SUM(amountpaid) as totalpaid')
+                        ->where('invoice_id',$id)
+                        ->groupBy('invoiceno','created_at','receiptno','amountpaid')
+                            ->get();
+            $parentutilsum = collect($receiptdetails->parent_utility);
 
         $to = $request->input('mailto');
-        $from = Auth::user()->email;
+        $from = $request->input('mailfrom');
 
         /////////////////////   send Email/////////////////////////////////
       
-        Mail::to($to)->send(New receiptMail($receiptdetails,$receiptpayments));
+        Mail::to($to)->send(New receiptMail($payment,$receiptdetails,$receiptpayments,$parentutilsum));
 
         $sentemail = SentEmail::updateOrCreate(
             [
-                 'lease_id'    => $receiptdetails->lease_id
+                 'item_id'    => $id
              ], 
              [
                     'lease_id'  => $request->input('lease_id'),
@@ -123,7 +129,8 @@ class EmailController extends Controller
              ]
        
              );
-        return View('emails.receiptEmailView',compact('receiptdetails','receiptpayments'));
+      
+        return View('emails.receiptEmailView',compact('receiptdetails','receiptpayments','payment','parentutilsum'));
 
 
     }

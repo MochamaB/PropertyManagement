@@ -92,7 +92,28 @@ class PaymentsController extends Controller
          $parentutilsum = collect($invoice->parent_utility);
          
          $paymenttypes = paymenttypes::all();
-        return view('payments.create', compact('invoice','paymenttypes','parentutilsum')); 
+
+        $date = \Carbon\Carbon::parse($invoice->invoicedate)->subMonths();
+
+        $invoicesnotpaid = invoice::leftjoin('payments','invoices.id','=','payments.invoice_id')
+                                ->join('lease','lease.id','=','Invoices.lease_id')
+                                 ->join('houses', 'houses.id', '=', 'lease.house_id')
+                                 ->join('tenants','tenants.id','=','lease.tenant_id')
+                                  ->where('invoices.invoicedate','<',$invoicedate)
+                                 ->where('invoicetype',$invoicetype)
+                                 ->where('invoices.lease_id',$lease_id)
+                                 ->selectRaw('SUM(payments.amountpaid) as totalamountpaid')
+                    ->select('invoices.invoiceno','invoices.invoicedate','invoices.amountdue','payments.amountpaid'
+                            ,'invoices.invoicetype','houses.housenumber','tenants.firstname','tenants.lastname','invoices.parent_utility')
+                                  ->get();
+
+                                  foreach($invoicesnotpaid as $item){
+                                    $parentutilsum = collect($item->parent_utility);
+                                    
+                                }
+         // dd($invoicesnotpaid);
+
+        return view('payments.create', compact('invoice','paymenttypes','parentutilsum','invoicesnotpaid','date')); 
     }
 
     /**
@@ -114,6 +135,11 @@ class PaymentsController extends Controller
          
 
         ]);
+        if(Payments::where('payment_code','!=', null)
+                    ->where('payment_code',$request->payment_code)->exists()){
+
+            return redirect()->back()->with('statuserror','Payment code already in the system');  
+        }
         $prefix = "RCT";
         $recordnounique = IdGenerator::generate(['table' => 'payments','field' => 'receiptno', 'length' => 4, 'prefix' =>$prefix]);
 
@@ -134,7 +160,8 @@ class PaymentsController extends Controller
         $month = \Carbon\Carbon::parse($payments->invoicedate)->format('M');
         $year = $date->year;
         
-        return redirect('payments/Listpayments/'.$year. '/' . $month. '/' . $payments->paymentitem)->with('status','Payment Made Successfully');
+        
+        return redirect('details-receipt/'.$payments->invoice_id. '/' . $payments->lease_id. '/' . $payments->invoicedate. '/' . $payments->paymentitem)->with('status','Payment Made Successfully');
     }
 
     /**
@@ -220,10 +247,10 @@ class PaymentsController extends Controller
                                   ->join('tenants','tenants.id','=','lease.tenant_id')
                                   ->join('houses','houses.id','=','lease.house_id')
                                   ->join('apartment','apartment.id','=','lease.apartment_id')
-             ->select('payments.invoice_id','payments.invoiceno','payments.receiptno','payments.paymentitem','tenants.firstname','tenants.lastname'
+             ->select('payments.invoice_id','payments.invoiceno','payments.receiptno','payments.paymentitem','payments.lease_id','tenants.firstname','tenants.lastname'
                       ,'houses.housenumber','tenants.idnumber','tenants.email','tenants.phonenumber','invoices.invoicedate','invoices.duedate','invoices.invoiceno',
                       'payments.created_at','invoices.amountdue','payments.amountpaid','apartment.name','apartment.logo','apartment.postalcode','apartment.location',
-                      'apartment.email')
+                      'apartment.email as apemail','apartment.authorized_person')
                                   ->where('payments.invoice_id',$id)
                                   ->first();
         $receiptpayments = payments::select('invoiceno','created_at','receiptno','amountpaid')

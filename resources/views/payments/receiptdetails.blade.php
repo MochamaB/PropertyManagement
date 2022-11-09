@@ -14,7 +14,7 @@
              </nav>
          </div>
          <div>
-                <button class="btn btn-danger text-white mb-0 me-0 float-end" onclick="history.back()"><i class="mdi mdi-keyboard-return">Back To Receipt List</i></button>
+                <a href="{{ url('invoices/ListInvoices/'.\Carbon\Carbon::parse($receiptdetails->invoicedate)->format('Y'). '/' . Carbon\Carbon::parse($receiptdetails->invoicedate)->format('M'). '/' .$receiptdetails->paymentitem) }}" class="btn btn-danger text-white mb-0 me-0 float-end"><i class="mdi mdi-keyboard-return">Back to Invoices</i></a>
          </div>
      </div>
 
@@ -48,7 +48,7 @@
                                             <li class="text-bold-800">{{$receiptdetails->name}}</li>
                                             <li>{{$receiptdetails->postalcode}},</li>
                                             <li>{{$receiptdetails->location}},</li>
-                                            <li>{{$receiptdetails->email}}</li>
+                                            <li>{{$receiptdetails->apemail}}</li>
                                           </ul>
                                     </div>
                                 <div class="col " style="text-align: right;">
@@ -139,7 +139,7 @@
                                 <div class="col">
                                         <p class="mb-0 mt-1">Authorized person</p>
                                     <img src="{{ asset('Templateassets/img/signature.png') }}" alt="signature" class="height-100" />
-                                    <h6>MJ HINGA</h6>
+                                    <h6>{{$receiptdetails->authorized_person}}</h6>
                                     <p class="text-muted">Managing Director</p>
                                 </div>
                             </div>

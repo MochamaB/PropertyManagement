@@ -21,6 +21,7 @@ use App\Http\Controllers\RepairworkController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\SystemsettingsController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReportsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -199,7 +200,7 @@ Route::get('previewEmail/{id}/{lease_id}/{invoicedate}/{invoicetype}', [EmailCon
 Route::get('sent-invoice-emails', [EmailController::class, 'sentInvoiceEmails'])->name('Email.sentinvoice');
 
 Route::get('send-AutomaticInvoiceEmail', [EmailController::class, 'autoinvoiceEmail'])->name('Email.auto_invoice');
-Route::get('send-PaymentEmail/{invoice_id}', [EmailController::class, 'receiptMail'])->name('Email.receipt');
+Route::get('send-PaymentEmail/{id}', [EmailController::class, 'receiptMail'])->name('Email.receipt');
 Route::get('send-workorderEmail/{maintenance_id}', [EmailController::class, 'workorderMail'])->name('Email.workorder');
 
 /*     Maintenance Routes    */
@@ -233,17 +234,6 @@ Route::put('update-apartments/{id}', [ApartmentController::class, 'update'])->na
 
 Route::get('delete-apartments/{id}', [ApartmentController::class, 'destroy'])->name('Apartments.destroy');
 
-        
-});
-
-
-
-
-/////////////  Error Routes /////////////////
-Route::fallback(function(){
-    return view('errors.404');
-});
-/////////////////////////////////////
 
 
 /*     Tasks Routes    */
@@ -267,6 +257,22 @@ Route::put('update-setting/{id}', [SystemsettingsController::class, 'update'])->
 Route::get('delete-setting/{id}', [SystemsettingsController::class, 'destroy'])->name('Settings.destroy');
 
 Route::get('add-tenantfromuser/{id}', [TenantsController::class, 'createfromuser'])->name('Tenants.create_from_users');
+
+/*     Reports Routes    */
+
+Route::get('reports', [ReportsController::class, 'index'])->name('Reports.filter');
+Route::get('view-report/', [ReportsController::class, 'view'])->name('Reports.view');
+        
+});
+////////// End of route Group /////////////////////////
+
+
+
+/////////////  Error Routes /////////////////
+Route::fallback(function(){
+    return view('errors.404');
+});
+/////////////////////////////////////
 
 
 
